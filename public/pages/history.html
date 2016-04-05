@@ -1,0 +1,64 @@
+<div class="module">
+    <div class="module-head">
+        <h3>
+            DataTables</h3>
+    </div>
+    <div class="module-body table" ng-controller="customersCtrl">
+        <table cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped	 display"
+            width="100%">
+            <thead>
+                <tr >
+                    <th>
+                        Script ID
+                    </th>
+                    <th>
+                        VIOS Name
+                    </th>
+                    <th>
+                        VIOS Build
+                    </th>
+                    <th>
+                        VIOS Patch
+                    </th>
+                    <th>
+                        Email ID
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="odd gradeX" ng-repeat="x in myData2">
+                    <td>
+                        {{x.id}}
+                    </td>
+                    <td>
+                        {{x.viosName}}
+                    </td>
+                    <td>
+                        {{x.build}}
+                    </td>
+                    <td class="center">
+                        {{x.patch}}
+                    </td>
+                    <td class="center">
+                        {{x.emailID}}
+                    </td>
+                    <td class="center">
+                        {{x.date}}
+                    </td>
+                    <td class="center">
+                        {{x.status}}
+                    </td>
+                </tr>
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
