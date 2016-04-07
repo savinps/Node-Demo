@@ -17,8 +17,30 @@ angular.module('mainApp').controller('loginController', function($scope) {
   //   });
 });
 
-angular.module('mainApp').controller('customersCtrl', function($scope, $http) {
-  console.log("In customersCtrl");
+angular.module('mainApp').controller('viosFormCtrl', function($scope, $location) {
+  console.log("In viosFormCtrl");
+  $scope.submit = function() {
+    $location.path('/form');
+  }
+});
+
+angular.module('mainApp').controller('viosStatusCtrl', function($scope, $location) {
+  console.log("In viosStatusCtrl");
+  $scope.submit = function() {
+    $location.path('/history');
+  }
+});
+
+angular.module('mainApp').controller('dashBoardCtrl', function($scope, $location) {
+  console.log("In dashBoardCtrl");
+  $scope.submit = function() {
+    $location.path('/home');
+  }
+});
+
+
+angular.module('mainApp').controller('logDataCtrl', function($scope, $http) {
+  console.log("In logDataCtrl");
 
   $http.get("data.json").then(function (response) {
       console.log("http success");
@@ -30,6 +52,20 @@ angular.module('mainApp').controller('customersCtrl', function($scope, $http) {
       $scope.myData2 = response.data;
   });
 
+  $scope.getLogDetails=function(){
+    console.log("Inside Log File Function");
+   $http({ method: 'GET',
+                   url: '/history'
+                  })
+                  .then(function(res) {
+                      console.log(res.data);
+                      $scope.logDetails = res.data;
+
+                      console.log("http log data")
+                      return (res.data);
+
+                  });
+  }
 });
 
 mainApp.config(['$routeProvider', function($routeProvider) {
@@ -46,5 +82,8 @@ mainApp.config(['$routeProvider', function($routeProvider) {
     })
     .when('/home', {
       templateUrl: 'pages/home.html'
+    })
+    .otherwise({
+      redirectTo: '/'
     });
 }]);
