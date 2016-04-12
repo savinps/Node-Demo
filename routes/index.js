@@ -1,6 +1,6 @@
 var express=require('express');
 var fs = require('fs');
-var configFile = fs.readFileSync('./public/data2.json');
+var configFile = fs.readFileSync('./public/data3.json');
 var config = JSON.parse(configFile);
 var execProcess = require("../exec_process.js");
 router=express.Router();
@@ -45,10 +45,14 @@ router.get('/',function(req,res,next){
 
 router.get('/history',function(req,res,next){
   console.log("history is success");
-  console.log(getFiles('SSP_Debug'));
-  res.send(getFiles('SSP_Debug'));
+  console.log(getFiles('SSP_Logs'));
+  res.send(getFiles('SSP_Logs'));
 
 
+});
+
+router.get('/viosList',function(req,res,next){
+  console.log("VIOS List  is success");
 });
 
 router.post('/form',function(req,res,next){
@@ -92,7 +96,7 @@ router.post('/form',function(req,res,next){
 
   config.push(obj);
   var configJSON = JSON.stringify(config);
-  fs.writeFileSync('./public/data2.json', configJSON);
+  fs.writeFileSync('./public/data3.json', configJSON);
   }
   console.log(config);
 
@@ -110,10 +114,10 @@ for (var i = 0; i < config.length; i++){
 }
 console.log(count);
 console.log(config);
-appendObject({"id":"4","viosName":viosname,"build":build,"patch":patch,"emailID":mailid,"date":cur_time,"status":"FAILED"});
+
 
 execProcess.result("./ssp_vios_setup_trail"+commandString, function(err, response){
-//execProcess.result(" ./SSP_Debug/debug", function(err, response){
+
     console.log("Invoking master script");
   	if(!err){
   		console.log(response);
@@ -122,6 +126,27 @@ execProcess.result("./ssp_vios_setup_trail"+commandString, function(err, respons
   	}
   });
 
+  var delay=7000; //7 second
+
+setTimeout(function() {
+  //your code to be executed after 7 second
+  execProcess.result("./debug", function(err, response){
+      //console.log("Invoking Log files folder");
+      if(!err){
+        var logFilePath = response;
+        console.log(logFilePath);
+        logFilePath = logFilePath.slice(0,-2);
+        appendObject({"id":"4","viosName":viosname,"build":build,"patch":patch,"emailID":mailid,"date":cur_time,"status":"Running","LogFiles":logFilePath});
+      }else {
+        console.log(err);
+      }
+    });
+
+}, delay);
+
+
+
+// appendObject({"id":"4","viosName":viosname,"build":build,"patch":patch,"emailID":mailid,"date":cur_time,"status":"Running","LogFiles":logFilePath});
 
 });
 

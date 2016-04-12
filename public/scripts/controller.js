@@ -38,6 +38,13 @@ angular.module('mainApp').controller('dashBoardCtrl', function($scope, $location
   }
 });
 
+angular.module('mainApp').controller('viosListCtrl', function($scope, $location) {
+  console.log("In viosListCtrl");
+  $scope.submit = function() {
+    $location.path('/viosList');
+  }
+});
+
 
 angular.module('mainApp').controller('logDataCtrl', function($scope, $http) {
   console.log("In logDataCtrl");
@@ -47,9 +54,13 @@ angular.module('mainApp').controller('logDataCtrl', function($scope, $http) {
       $scope.myData = response.data;
   });
 
-  $http.get("data2.json").then(function (response) {
+  $http.get("data3.json").then(function (response) {
       console.log("http success");
       $scope.myData2 = response.data;
+  });
+  $http.get("data4.json").then(function (response) {
+      console.log("http success");
+      $scope.myData4 = response.data;
   });
 
   $scope.getLogDetails=function(){
@@ -79,6 +90,9 @@ mainApp.config(['$routeProvider', function($routeProvider) {
     })
     .when('/history', {
       templateUrl: 'pages/history.html'
+    })
+    .when('/viosList', {
+      templateUrl: 'pages/viosList.html'
     })
     .when('/home', {
       templateUrl: 'pages/home.html'
