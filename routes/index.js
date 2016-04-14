@@ -51,6 +51,16 @@ router.get('/history',function(req,res,next){
 
 });
 
+router.post('/historyp',function(req,res,next){
+  console.log("Log Directory name");
+  var logDir = req.body.dirNme;
+  console.log(logDir);
+  res.send(getFiles('SSP_Logs/'+logDir));
+  // res.writeHead(200,{"Content-Type":"text/plain"});
+  // res.write("Sending Log Response");
+
+})
+
 router.get('/viosList',function(req,res,next){
   console.log("VIOS List  is success");
 });
@@ -80,11 +90,11 @@ router.post('/form',function(req,res,next){
         var sec = today.getSeconds();
 
         if(dd<10) {
-            dd='0'+dd
+            dd='0'+dd;
         }
 
         if(mm<10) {
-            mm='0'+mm
+            mm='0'+mm;
         }
 
         today = mm+'/'+dd+'/'+yyyy;
@@ -135,7 +145,7 @@ setTimeout(function() {
       if(!err){
         var logFilePath = response;
         console.log(logFilePath);
-        logFilePath = logFilePath.slice(0,-2);
+        logFilePath = logFilePath.slice(0,-1);
         appendObject({"id":"4","viosName":viosname,"build":build,"patch":patch,"emailID":mailid,"date":cur_time,"status":"Running","LogFiles":logFilePath});
       }else {
         console.log(err);
@@ -149,5 +159,15 @@ setTimeout(function() {
 // appendObject({"id":"4","viosName":viosname,"build":build,"patch":patch,"emailID":mailid,"date":cur_time,"status":"Running","LogFiles":logFilePath});
 
 });
+
+
+//  Post request for getting Vios list
+router.post('/viosListp',function(req,res,next){
+  console.log("Recieved VIOS entry Data");
+  var viosEntry= req.body.temp.entryV;
+  console.log(viosEntry);
+  res.send("Got Data");
+});
+
 
 module.exports = router;
