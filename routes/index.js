@@ -2,24 +2,32 @@ var express=require('express');
 var fs = require('fs');
 var configFile = fs.readFileSync('./public/data3.json');
 var config = JSON.parse(configFile);
+var nodeFile = fs.readFileSync('./public/data4.json');
+var nodeList = JSON.parse(nodeFile);
 var execProcess = require("../exec_process.js");
 router=express.Router();
 
 function getFiles (dir, files_){
     files_ = files_ || [];
     var files = fs.readdirSync(dir);
+    var jsonArr = [];
     for (var i in files){
         console.log(i);
         var name = dir + '/' + files[i];
-        // var text = fs.readFileSync(name,'utf8')
-        // console.log (text)
+      //  var name = files[i];
+        var text = fs.readFileSync(name,'utf8')
+      //  console.log (text);
+        jsonArr.push({filename: name , logContent: text});
+
         if (fs.statSync(name).isDirectory()){
             getFiles(name, files_);
         } else {
-            files_.push(name);
+            files_.push(name,text);
         }
     }
-    return files_;
+    //return files_;
+    console.log(jsonArr);
+    return jsonArr;
 }
 
 router.get('/',function(req,res,next){
@@ -112,16 +120,20 @@ router.post('/form',function(req,res,next){
 
   // To find the number of entries of a particular vios in data2.json
   var count =0;
+  var viosArray = viosname.split(" ");
 
 // iterate over each element in the array
-for (var i = 0; i < config.length; i++){
-  // look for the entry with a matching `code` value
-  if (config[i].viosName == viosname){
-    count= count+1;
-    config.splice(i,1);
-    i=0;
-  }
-}
+    for (index = 0; index < viosArray.length; ++index) {
+      for (var i = 0; i < config.length; i++){
+        // look for the entry with a matching `code` value
+        if (config[i].viosName == viosArray[index]){
+          count= count+1;
+          config.splice(i,1);
+          i=0;
+        }
+      }
+    }
+
 console.log(count);
 console.log(config);
 
@@ -146,7 +158,11 @@ setTimeout(function() {
         var logFilePath = response;
         console.log(logFilePath);
         logFilePath = logFilePath.slice(0,-1);
-        appendObject({"id":"4","viosName":viosname,"build":build,"patch":patch,"emailID":mailid,"date":cur_time,"status":"Running","LogFiles":logFilePath});
+        //
+        for (index = 0; index < viosArray.length; ++index) {
+          console.log(viosArray[index]);
+        appendObject({"id":"4","viosName":viosArray[index],"build":build,"patch":patch,"emailID":mailid,"date":cur_time,"status":"Running","LogFiles":logFilePath});
+         }
       }else {
         console.log(err);
       }
@@ -164,10 +180,99 @@ setTimeout(function() {
 //  Post request for getting Vios list
 router.post('/viosListp',function(req,res,next){
   console.log("Recieved VIOS entry Data");
-  var viosEntry= req.body.temp.entryV;
-  console.log(viosEntry);
-  res.send("Got Data");
-});
+  var viosEntry= req.body.vEntry;
+  console.log(req.body.vEntry);
+  res.send(viosEntry);
+  var temp = viosEntry.split(" ");
 
+   var viosname = temp[0];
+   var ms = temp[1];
+   var hmc = temp[2];
+   console.log(viosname);
+   console.log(ms);
+   console.log(hmc);
+
+     //// // Removing Old Entries and Writing NODES_MS_HMC.txt
+
+   execProcess.result("./removeNode "+viosname, function(err, response){
+
+       console.log("Removing Obselete VIOS entry");
+     	if(!err){
+     		var msg = response;
+        console.log("here is the msg"+msg);
+     	}else {
+     		console.log(err);
+     	}
+     });
+
+     var delay=3000; //second
+
+    setTimeout(function() {
+       fs.appendFile('NODE_MS_HMC.txt',viosname+" "+ms+" "+hmc+"\n", function (err) {
+      if (err) throw err;
+      console.log('It\'s appended!');
+         });
+
+      }, delay);
+
+//////////////////// Removing and Writing to VIOS List JSON file
+            var delay=2000; //second
+
+        //   setTimeout(function() {
+      function appendObject(nodeObj){
+
+      nodeList.push(nodeObj);
+      var nodeListJSON = JSON.stringify(nodeList);
+      fs.writeFileSync('./public/data4.json', nodeListJSON);
+      }
+      console.log(nodeList);
+
+      // To find the number of entries of a particular vios in data2.json
+      var count =0;
+
+    // iterate over each element in the array
+    for (var i = 0; i < nodeList.length; i++){
+      // look for the entry with a matching `code` value
+      if (nodeList[i].node == viosname){
+        count= count+1;
+        nodeList.splice(i,1);
+        i=0;
+      }
+    }
+    console.log("count="+count);
+    console.log(nodeList);
+    //
+    //
+       appendObject({"node":viosname,"MS":ms,"HMC":hmc});
+       console.log("After Appending");
+       console.log(nodeList);
+    //   }, delay);
+
+////////////////////////////////////////////////////////////////////////////////
+    // var obj = require("../public/data4.json");
+    // console.log(obj);
+    //
+    // for(var i = 0; i < obj.length; i++)
+    // {
+    //   if(obj[i].node == viosname)
+    //   {
+    //     console.log(obj[i]);;
+    //     delete obj[i];
+    //     console.log("Deleted a row");
+    //   }
+    // }
+
+      // function appendObject(obj){
+      //
+      // config.push(obj);
+      // var nodeListJSON = JSON.stringify(nodeList);
+      // fs.writeFileSync('./public/data4.json', nodeListJSON);
+      // }
+      //
+      //    appendObject({"node":viosname,"MS":ms,"HMC":hmc});
+      //    console.log("After Appending");
+      //    console.log(nodeList);
+
+ });
 
 module.exports = router;

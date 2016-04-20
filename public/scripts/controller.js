@@ -1,5 +1,17 @@
 var mainApp = angular.module('mainApp', ['ngRoute']);
 
+angular.module('mainApp').filter("myFilter", function(){
+    return function(input, test){
+        var newArray = [];
+        for(var x = 0; x < input.length; x+=2){
+             newArray.push(input[x]);
+        }
+        return newArray;
+    }
+});
+
+
+
 angular.module('mainApp').controller('loginController', function($scope) {
   $scope.message = "You are in login page";
   //
@@ -47,18 +59,16 @@ angular.module('mainApp').controller('viosListCtrl', function($scope, $location)
   }
 });
 
-angular.module('mainApp').controller('viosListController', function ($scope) {
+angular.module('mainApp').controller('viosListController', function ($scope,$http) {
 
     console.log("In ViosList controller");
   //  $scope.data = [];
     $scope.submitForm = function(viosName,ms,hmc) {
       var entryString = viosName+" "+ms+" "+hmc;
       console.log(entryString);
-    // // //  $scope.data.push(viosName,ms,hmc);
-    // //   console.log($scope.data);
-    // //   var vEntry = $scope.data;
-      var entryV = JSON.stringify({vEntry:entryString});
 
+      var entryV = JSON.stringify({vEntry:entryString});
+      console.log(entryV);
       $http({ method: 'POST',
               url: '/viosListp',
               data: entryV
@@ -72,6 +82,12 @@ angular.module('mainApp').controller('viosListController', function ($scope) {
               //               console.log("http log data")
               //                return (resp.data);
             });
+      // $http.post('/viosListp',entryV).
+      //     success(function(data) {
+      //         console.log("posted successfully");
+      //     }).error(function(data) {
+      //         console.error("error in posting");
+      //     })
   };
 });
 
@@ -108,6 +124,7 @@ angular.module('mainApp').controller('logDataCtrl', function($scope, $http) {
             var resData=resp.data;
             console.log(resData);
             console.log("posting data");
+
             $scope.logDetails = resData;
 
                           console.log("http log data")
@@ -135,6 +152,8 @@ angular.module('mainApp').controller('logDataCtrl', function($scope, $http) {
    //
   //                 });
   }
+
+
 });
 
 mainApp.config(['$routeProvider', function($routeProvider) {

@@ -8,9 +8,7 @@
             width="100%">
             <thead>
                 <tr >
-                    <th>
-                        Script ID
-                    </th>
+
                     <th>
                         VIOS Name
                     </th>
@@ -27,16 +25,14 @@
                         Date
                     </th>
                     <th>
-                        Status
+                        Log Folder
                     </th>
 
                 </tr>
             </thead>
             <tbody>
                 <tr class="odd gradeX" ng-repeat="x in myData2">
-                    <td>
-                        {{x.id}}
-                    </td>
+
                     <td>
                         {{x.viosName}}
                     </td>
@@ -54,14 +50,51 @@
                     </td>
                     <td> <a class="center" href="" ng-click="getLogDetails(x.LogFiles)" class="btn btn-primary">
                         {{x.LogFiles}} </a>
-                        <span>{{logDetails}}</span>
+                        <!-- <span>{{logDetails}}</span> -->
                     </td>
                 </tr>
 
 
             </tbody>
         </table>
-        <a href="" ng-click="getLogDetails()"class="btn btn-primary">Show log content</a>
-        <span>{{logDetails}}</span>
-    </div>
+
+          <!-- <div class="module-body"
+
+
+          <ul ng-repeat="file in logDetails">
+
+              <p>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" >
+            {{file.filename}}
+            </button>
+          </p>
+
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel">{{file.filename}}</h4>
+                </div>
+                <div class="modal-body">
+                  {{file.logContent}}
+                 </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                </div>
+              </div>
+            </div>
+            </div>
+        </ul>
+        </div>  -->
+
+    <div class="module-body"
+
+  
+
+  </div>
+
 </div>
