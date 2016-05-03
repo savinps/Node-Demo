@@ -18,7 +18,8 @@ var express = require('express'),
   app.post('/form', routes);
   app.get('/history',routes);
  app.post('/historyp',routes);
-  var server = app.listen(8080, function() {
+ app.post('/clusterForm', routes);
+  var server = app.listen(80, function() {
     console.log("Server started");
 
   });

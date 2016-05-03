@@ -23,34 +23,34 @@
 
         <form id="form1" class="form-horizontal row-fluid" method="post" action="/form" name="myForm">
           <div class="control-group">
-            <label class="control-label" for="basicinput">VIOS Build</label>
+            <label class="control-label" for="basicinput">VIOS Build *</label>
             <div class="controls">
-              <input type="text" id="basicinput" placeholder="Select Build name here..." class="span8" name="temp[build]" ng-model="build" required>
-              <span ng-show="myForm.temp[build].$untouched && myForm.temp[build].$invalid">The name is required.</span>
-              <span class="help-inline">Minimum 5 Characters</span>
+              <input type="text" id="basicinput" placeholder="Enter Build name here..." class="span8" name="temp[build]" ng-model="build" required>
+              <span ng-show="myForm.temp[build].$untouched && myForm.temp[build].$invalid"></span>
+              <span class="help-inline"></span>
             </div>
           </div>
 
           <div class="control-group">
             <label class="control-label" for="basicinput">VIOS Patch</label>
             <div class="controls">
-              <input type="text" id="basicinput" placeholder="Select the Patch here..." class="span8" name="temp[patch]">
+              <input type="text" id="basicinput" placeholder="Enter the Patch here..." class="span8" name="temp[patch]">
 
             </div>
           </div>
 
           <div class="control-group">
-            <label class="control-label" for="basicinput">Email ID</label>
+            <label class="control-label" for="basicinput">Email ID *</label>
             <div class="controls">
               <input data-title="A tooltip for the input" type="text" placeholder="Enter the Email IDs…" data-original-title="" class="span8 tip" name="temp[mailID]" ng-model="mailID" required>
-              <span ng-show="myForm.temp[mailID].$untouched && myForm.temp[mailID].$invalid">The name is required.</span>
+              <span ng-show="myForm.temp[mailID].$untouched && myForm.temp[mailID].$invalid"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="basicinput">VIOS name</label>
+            <label class="control-label" for="basicinput">VIOS List *</label>
             <div class="controls">
               <input data-title="A tooltip for the input" type="text" placeholder="Enter the VIOS names…" data-original-title="" class="span8 tip" name="temp[viosName]" ng-model="viosName" required>
-              <span ng-show="myForm.temp[viosName].$untouched && myForm.temp[viosName].$invalid">The name is required.</span>
+              <span ng-show="myForm.temp[viosName].$untouched && myForm.temp[viosName].$invalid"></span>
             </div>
           </div>
 
@@ -58,12 +58,12 @@
             <label class="control-label" for="basicinput">ROOTVG Disk</label>
             <div class="controls">
               <input data-title="A tooltip for the input" type="text" placeholder="Enter the rootvg disks…" data-original-title="" class="span8 tip" name="temp[rootvg]"  ng-model="rootvg" required>
-              <span ng-show="myForm.temp[rootvg].$touched && myForm.temp[rootvg].$invalid">The name is required.</span>
+              <span ng-show="myForm.temp[rootvg].$touched && myForm.temp[rootvg].$invalid"></span>
             </div>
           </div>
 
 
-          <div class="control-group">
+          <!-- <div class="control-group">
             <label class="control-label" for="basicinput">Number of VIOS</label>
             <div class="controls">
               <div class="dropdown">
@@ -84,8 +84,8 @@
                 </ul>
               </div>
             </div>
-          </div>
-          
+          </div> -->
+
 
           <!-- <div class="control-group" ng-controller="logDataCtrl">
             <label>{{myData.catergoryName}}</label>

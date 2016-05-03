@@ -38,6 +38,13 @@ angular.module('mainApp').controller('viosFormCtrl', function($scope, $location)
   }
 });
 
+angular.module('mainApp').controller('clusterFormCtrl', function($scope, $location) {
+  console.log("In clusterFormCtrl");
+  $scope.submit = function() {
+    $location.path('/clusterForm');
+  }
+});
+
 angular.module('mainApp').controller('viosStatusCtrl', function($scope, $location) {
   console.log("In viosStatusCtrl");
   $scope.submit = function() {
@@ -108,7 +115,10 @@ angular.module('mainApp').controller('logDataCtrl', function($scope, $http) {
       console.log("http success");
       $scope.myData4 = response.data;
   });
-
+  $scope.print_log=function(index) {
+    console.log($scope.logDetails);
+    alert("Index is "+index);
+  }
   $scope.getLogDetails=function(dirName){
     console.log("Inside Log File Function");
     console.log(dirName);
@@ -167,6 +177,9 @@ mainApp.config(['$routeProvider', function($routeProvider) {
     })
     .when('/history', {
       templateUrl: 'pages/history.html'
+    })
+    .when('/clusterForm', {
+      templateUrl: 'pages/clusterForm.html'
     })
     .when('/viosList', {
       templateUrl: 'pages/viosList.html'

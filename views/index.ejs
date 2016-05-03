@@ -163,8 +163,8 @@
                     VIOS INSTALL
                   </a>
                 </li>
-                <li>
-                  <a href="other-user-profile.html">
+                <li ng-controller="clusterFormCtrl">
+                  <a href="" ng-click="submit()">
                     <i class="icon-inbox"></i>
                     CLUSTER INSTALL
                   </a>
@@ -173,17 +173,31 @@
             </li>
 
             <li>
-              <a href="task.html">
-                <i class="menu-icon icon-tasks"></i>
-                Mapping
-                <!-- <b class="label orange pull-right">19</b> -->
+              <a class="collapsed" data-toggle="collapse" href="#togglePages3">
+                <i class="menu-icon icon-cog"></i>
+                <i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right"></i>
+                Backup Option
               </a>
+              <ul id="togglePages3" class="collapse unstyled">
+                <li ng-controller="viosFormCtrl">
+                  <a href="" ng-click="submit()">
+                    <i class="icon-inbox"></i>
+                    VIOS BACKUP
+                  </a>
+                </li>
+                <li ng-controller="clusterFormCtrl">
+                  <a href="" ng-click="submit()">
+                    <i class="icon-inbox"></i>
+                    CLUSTER BACKUP
+                  </a>
+                </li>
+              </ul>
             </li>
 
             <li>
               <a href="task.html">
                 <i class="menu-icon icon-tasks"></i>
-                Instructions
+                Help
                 <!-- <b class="label orange pull-right">19</b> -->
               </a>
             </li>

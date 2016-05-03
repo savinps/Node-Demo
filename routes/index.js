@@ -74,7 +74,7 @@ router.get('/viosList',function(req,res,next){
 });
 
 router.post('/form',function(req,res,next){
-  console.log("Recieved form data");
+  console.log("Recieved Vios form data");
   var viosname= req.body.temp.viosName;
   console.log(viosname);
   var mailid= req.body.temp.mailID;
@@ -161,9 +161,18 @@ setTimeout(function() {
         //
         for (index = 0; index < viosArray.length; ++index) {
           console.log(viosArray[index]);
+          for (var i = 0; i < nodeList.length; i++){
+            // look for the entry with a matching `code` value
+            if (nodeList[i].node == viosArray[index]){
+              flag=1;
+              break;
+            }
+
         appendObject({"id":"4","viosName":viosArray[index],"build":build,"patch":patch,"emailID":mailid,"date":cur_time,"status":"Running","LogFiles":logFilePath});
          }
-      }else {
+      }
+    }
+      else {
         console.log(err);
       }
     });
@@ -273,6 +282,23 @@ router.post('/viosListp',function(req,res,next){
       //    console.log("After Appending");
       //    console.log(nodeList);
 
+ });
+
+
+ /// Cluster form
+
+ router.post('/clusterForm',function(req,res,next){
+   console.log("Recieved Cluster form data");
+   var viosname= req.body.temp.viosName;
+   console.log(req.body);
+   var mailid= req.body.temp.mailID;
+   console.log(mailid);
+   var rootvg = req.body.temp.rootvg;
+   console.log(rootvg);
+   var patch = req.body.temp.patch;
+   console.log(patch);
+   var build = req.body.temp.build;
+   console.log(build);
  });
 
 module.exports = router;
