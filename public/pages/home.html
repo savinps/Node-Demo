@@ -1,13 +1,13 @@
 <div class="content">
-                            <div class="btn-controls" ng-controller="viosFormCtrl" >
+                            <div class="btn-controls"  >
                                 <div class="btn-box-row row-fluid">
-                                    <a href="" class="btn-box big span4"  ng-click="submit()"><i class=" icon-random"></i><b></b>
+                                    <a href="" class="btn-box big span4"  ng-controller="viosFormCtrl" ng-click="submit()"><i class=" icon-random"></i><b></b>
                                         <p class="text-muted">
                                             VIOS INSTALLATION</p>
-                                    </a><a href="" class="btn-box big span4"><i class="icon-user"></i><b></b>
+                                    </a><a href="" class="btn-box big span4" ng-controller="clusterFormCtrl" ng-click="submit()"><i class="icon-user"></i><b></b>
                                         <p class="text-muted">
                                             CLUSTER INSTALLATION</p>
-                                    </a><a href="" class="btn-box big span4"><i class="icon-money"></i><b></b>
+                                    </a><a href="" class="btn-box big span4" ng-controller="clusterCreateCtrl" ng-click="submit()"><i class="icon-money"></i><b></b>
                                         <p class="text-muted">
                                             CLUSTER CREATION</p>
                                     </a>
@@ -104,7 +104,7 @@
                                 </div>
                             </div>
 
-                            
+
                             <!--/.module-->
                         </div>
                         <!--/.content-->

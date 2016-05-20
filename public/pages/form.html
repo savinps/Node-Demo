@@ -1,10 +1,10 @@
-<div class="content">
+<div class="content" >
 
   <div class="module">
     <div class="module-head">
       <h3>VIOS INSTALLATION FORM</h3>
     </div>
-    <div class="module-body">
+    <div class="module-body" ng-controller = "viosFormController">
 
         <!-- <div class="alert">
           <button type="button" class="close" data-dismiss="alert">×</button>
@@ -21,12 +21,12 @@
 
         <br />
 
-        <form id="form1" class="form-horizontal row-fluid" method="post" action="/form" name="myForm">
+        <form id="form1" class="form-horizontal row-fluid"  name="myForm">
           <div class="control-group">
             <label class="control-label" for="basicinput">VIOS Build *</label>
             <div class="controls">
-              <input type="text" id="basicinput" placeholder="Enter Build name here..." class="span8" name="temp[build]" ng-model="build" required>
-              <span ng-show="myForm.temp[build].$untouched && myForm.temp[build].$invalid"></span>
+              <input type="text" id="basicinput" placeholder="Enter Build name here..." class="span8" name="build" ng-model="build" required>
+              <span ng-show="myForm.build.$untouched && myForm.build.$invalid"></span>
               <span class="help-inline"></span>
             </div>
           </div>
@@ -34,7 +34,7 @@
           <div class="control-group">
             <label class="control-label" for="basicinput">VIOS Patch</label>
             <div class="controls">
-              <input type="text" id="basicinput" placeholder="Enter the Patch here..." class="span8" name="temp[patch]">
+              <input type="text" id="basicinput" placeholder="Enter the Patch here..." class="span8" name="patch">
 
             </div>
           </div>
@@ -42,23 +42,23 @@
           <div class="control-group">
             <label class="control-label" for="basicinput">Email ID *</label>
             <div class="controls">
-              <input data-title="A tooltip for the input" type="text" placeholder="Enter the Email IDs…" data-original-title="" class="span8 tip" name="temp[mailID]" ng-model="mailID" required>
-              <span ng-show="myForm.temp[mailID].$untouched && myForm.temp[mailID].$invalid"></span>
+              <input data-title="A tooltip for the input" type="text" placeholder="Enter the Email IDs…" data-original-title="" class="span8 tip" name="mailID" ng-model="mailID" required>
+              <span ng-show="myForm.mailID.$untouched && myForm.mailID.$invalid"></span>
             </div>
           </div>
           <div class="control-group">
             <label class="control-label" for="basicinput">VIOS List *</label>
             <div class="controls">
-              <input data-title="A tooltip for the input" type="text" placeholder="Enter the VIOS names…" data-original-title="" class="span8 tip" name="temp[viosName]" ng-model="viosName" required>
-              <span ng-show="myForm.temp[viosName].$untouched && myForm.temp[viosName].$invalid"></span>
+              <input data-title="A tooltip for the input" type="text" placeholder="Enter the VIOS names…" data-original-title="" class="span8 tip" name="viosName" ng-model="viosName" required>
+              <span ng-show="myForm.viosName.$untouched && myForm.viosName.$invalid"></span>
             </div>
           </div>
 
           <div class="control-group">
             <label class="control-label" for="basicinput">ROOTVG Disk</label>
             <div class="controls">
-              <input data-title="A tooltip for the input" type="text" placeholder="Enter the rootvg disks…" data-original-title="" class="span8 tip" name="temp[rootvg]"  ng-model="rootvg" required>
-              <span ng-show="myForm.temp[rootvg].$touched && myForm.temp[rootvg].$invalid"></span>
+              <input data-title="A tooltip for the input" type="text" placeholder="Enter the rootvg disks…" data-original-title="" class="span8 tip" name="rootvg"  ng-model="rootvg" required>
+              <span ng-show="myForm.rootvg.$touched && myForm.rootvg.$invalid"></span>
             </div>
           </div>
 
@@ -138,7 +138,7 @@
             </div>
             </div> -->
 
-            <div class="control-group">
+            <!-- <div class="control-group">
                 <button type="submit" class="btn btn-primary" form="form1">Submit Form</button>
                 <div class="alert alert-success alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -148,16 +148,28 @@
                 <div class="alert alert-error">
                   <button type="button" class="close" data-dismiss="alert">×</button>
                   <strong>Oh snap!</strong> Whats wrong with you?
-                </div>
+                </div> -->
+
 
         </form>
+        <input type="button" value="submit"  ng-click = " getScriptLogs()" ng-controller = "viosForm2Ctrl">
+        <!-- <button type="button" name="button"> Load Data</button> -->
+        <!-- <a href="" ng-click = "submit()"> -->
+
+        <div>
+          {{stats}}
+        </div>
+
         </div>
     </div>
   </div>
 
 
 
-</div><!--/.content-->
+
+
+
+<!--/.content-->
 
 <script type="text/javascript">
   $(function() {

@@ -11,6 +11,7 @@
     <link type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600' rel='stylesheet'>
     <link rel="stylesheet" href="css/sol.css">   <!-- multiselect css -->
 
+
 </head>
 
   <body>
@@ -114,8 +115,8 @@
                     VIOS INSTALL
                   </a>
                 </li>
-                <li>
-                  <a href="" >
+                <li ng-controller = "clusterStatusCtrl">
+                  <a href="" ng-click="submit()">
                     <i class="icon-inbox"></i>
                     CLUSTER INSTALL
                   </a>
@@ -236,7 +237,10 @@
     <script type="text/javascript" src="/scripts/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/scripts/sol.js"></script>
     <script type="text/javascript" src="/scripts/datatables/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.4.0/showdown.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.4.0/showdown.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.10/ngStorage.min.js"></script>
     <script>
   		$(document).ready(function() {
   			$('.datatable-1').dataTable();
