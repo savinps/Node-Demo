@@ -1,0 +1,149 @@
+<div class="module">
+    <div class="module-head">
+        <h3>
+            VIOS Details</h3>
+    </div>
+    <div class="module-body table" ng-controller="logDataCtrl">
+        <table cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped	 display"
+            width="100%">
+            <thead>
+                <tr >
+                    <th>
+                        VIOS Name
+                    </th>
+                    <th>
+                        Managed System
+                    </th>
+                    <th>
+                        Hardware Management Console
+                    </th>
+                    <!-- <th>
+                        Update/Remove
+                    </th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="odd gradeX" ng-repeat="x in myData4">
+                    <td>
+                        {{x.node}}
+                    </td>
+                    <td>
+                        {{x.MS}}
+                    </td>
+                    <td>
+                        {{x.HMC}}
+                    </td>
+                    <!-- <td class="center">
+                        Update/Remove -->
+                </tr>
+
+
+            </tbody>
+        </table>
+
+    </div>
+
+    </div>
+<a href="" class="btn btn-primary" ng-click="showme=true" ng-hide="showme">Create/Update</a>
+    <!-- <div class="content">
+
+      <div class="module">
+        <div class="module-head">
+          <h3>Forms</h3>
+        </div>
+        <div class="module-body">
+            <br />
+            <form id="form1" class="form-horizontal row-fluid" method="post" action="/form" name="myForm2">
+              <div class="control-group">
+                <label class="control-label" for="basicinput">VIOS Name</label>
+                <div class="controls">
+                  <input type="text" id="basicinput" placeholder="Enter the VIOS name..." class="span8" name="temp[viosName]" ng-model="viosName" required>
+                  <span ng-show="myForm2.temp[viosName].$untouched && myForm2.temp[viosName].$invalid">The name is required.</span>
+                  <span class="help-inline">Enter the correct name</span>
+                </div>
+              </div>
+
+
+
+              <div class="control-group">
+                <label class="control-label" for="basicinput">Managed System</label>
+                <div class="controls">
+                  <input data-title="A tooltip for the input" type="text" placeholder="Enter the Managed System Name…" data-original-title="" class="span8 tip" name="temp[ms]" ng-model="ms" required>
+                  <span ng-show="myForm2.temp[ms].$untouched && myForm2.temp[ms].$invalid">The name is required.</span>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="basicinput">Hardware Management Console</label>
+                <div class="controls">
+                  <input data-title="A tooltip for the input" type="text" placeholder="Enter the HMC Name…" data-original-title="" class="span8 tip" name="temp[hmc]" ng-model="hmc" required>
+                  <span ng-show="myForm2.temp[hmc].$untouched && myForm2.temp[hmc].$invalid">The name is required.</span>
+                </div>
+              </div>
+
+              <div class="control-group">
+                  <button type="submit" class="btn" form="form1">Submit Form</button>
+                  <div class="alert alert-success alert-dismissable">
+                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      Success! message sent successfully.
+                  </div>
+
+                  <div class="alert alert-error">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <strong>Oh snap!</strong> Whats wrong with you?
+                  </div>
+              </div>
+          </form>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="module" ng-controller="viosListController" ng-show="showme">
+        <div class="module-head">
+          <h3>Create or Update VIOS Details</h3>
+        </div>
+
+        <div class="module-body" >
+            <br />
+
+
+
+              <div class="control-group">
+                <label class="control-label" for="basicinput">VIOS Name</label>
+                <div class="controls">
+                  <input type="text" id="basicinput" placeholder="Enter the VIOS name..." class="span8"  ng-model="viosName" required>
+                  <span ng-show="viosName.$untouched && viosName.$invalid">The name is required.</span>
+                  <span class="help-inline">Only one VIOS name</span>
+
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="basicinput">Managed System</label>
+                <div class="controls">
+                  <input type="text" id="basicinput" placeholder="Enter the Managed System name..." class="span8" ng-model="ms" required>
+                  <span ng-show="ms.$untouched && ms.$invalid">The name is required.</span>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="basicinput">Hardware Management Console</label>
+                <div class="controls">
+                  <input type="text" id="basicinput" placeholder="Enter the HMC name..." class="span8" ng-model="hmc" required>
+                  <span ng-show="hmc.$untouched && hmc.$invalid">The name is required.</span>
+                </div>
+              </div>
+              <!-- <input type="submit" ng-click="submitForm(viosName,ms,hmc)" value="Click me!"> -->
+                <!-- <script type="text/javascript">
+                  // var entryString = {{viosName}}+" "+{{ms}}+" "+{{hmc}};
+                   console.log(entryString);
+                </script> -->
+              <div class="control-group">
+                  <button type="submit"  class="btn btn-primary" ng-click="submitForm(viosName,ms,hmc)">Add/Update</button>
+                  <div class="alert alert-success alert-dismissable">
+                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      Success! Entry created successfully.
+                  </div>
+        </div>
+      </div>
+      </div>

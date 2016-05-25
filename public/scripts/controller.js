@@ -1,5 +1,5 @@
 var mainApp = angular.module('mainApp', ['ngRoute','ngStorage']);
-console.log("In mainApp module");
+//console.log("In mainApp module");
 
 angular.module('mainApp').filter("myFilter", function(){
     return function(input, test){
@@ -337,14 +337,20 @@ angular.module('mainApp').controller('viosListController', function ($scope,$htt
 angular.module('mainApp').controller('logDataCtrl', function($scope, $http) {
   console.log("In logDataCtrl");
 
+
+
+
+
   $http.get("data.json").then(function (response) {
       console.log("http success");
       $scope.myData = response.data;
   });
 
+
   $http.get("data3.json").then(function (response) {
       console.log("http success");
       $scope.myData2 = response.data;
+      console.log($scope.myData2);
   });
   $http.get("data4.json").then(function (response) {
       console.log("http success");

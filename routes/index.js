@@ -1,6 +1,7 @@
 var express=require('express');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
+var nl2br = require('nl2br');
 var Promise = require('promise');
 var configFile = fs.readFileSync('./public/data3.json');
 var config = JSON.parse(configFile);
@@ -20,8 +21,10 @@ function getFiles (dir, files_){
         console.log(i);
         var name = dir + '/' + files[i];
       //  var name = files[i];
-        var text = fs.readFileSync(name,'utf8')
+        var text = fs.readFileSync(name,'utf8');
       //  console.log (text);
+        //var name = nl2br(name);
+        //var name =name.replace(/[^a-zA-Z ]/g, "");
         jsonArr.push({filename: name , logContent: text});
 
         if (fs.statSync(name).isDirectory()){

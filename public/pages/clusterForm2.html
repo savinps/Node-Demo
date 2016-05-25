@@ -1,0 +1,65 @@
+<div class="content" >
+
+  <div class="module">
+    <div class="module-head">
+      <h3>CLUSTER INSTALLATION PROGRESS</h3>
+    </div>
+    <div class="module-body" ng-controller = "clusterFormController">
+
+
+
+        <div> Script is running......Checking For Down Nodes...
+          <!-- <markdown> -->
+          <button type="button" name="button" ng-click ="confirmation()">Ping Test</button>
+          <br>
+           {{msg}}
+      <!-- </markdown> -->
+
+      <button type="button" name="button" ng-click="Yes()">Yes</button>
+      <button type="button" name="button" ng-click="No()">No</button>
+        <!-- <br>{{stats2}} -->
+        <br> {{scriptLogs2}}
+          </div>
+        <script type="text/javascript">
+          console.log("We are in clusterform2 page");
+        //  console.log($scope.scriptLogs);
+        //console.log($scope.scriptLogs);
+        </script>
+        </div>
+    </div>
+  </div>
+
+
+
+
+
+
+<!--/.content-->
+
+<script type="text/javascript">
+  $(function() {
+      // initialize sol
+      if (window.console) console.log('foo');
+      $('#my-select').searchableOptionList();
+  });
+</script>
+
+<script>
+           function ShowMessage() {
+               var result = confirm("Do your want to submit form?");
+               if (result) {
+                   return true;
+               } else {
+                   return false;
+               }
+           }
+       </script>
+
+       <script type="text/javascript">
+          $(document).ready(function(){
+              $('button').click(function(){
+              $('.alert').show()
+              })
+          });
+
+       </script>

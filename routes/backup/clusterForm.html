@@ -1,0 +1,218 @@
+<div class="content">
+
+  <div class="module">
+    <div class="module-head">
+      <h3>CLUSTER INSTALLATION FORM</h3>
+    </div>
+    <div class="module-body">
+
+        <!-- <div class="alert">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <strong>Warning!</strong> Something fishy here!
+        </div>
+        <div class="alert alert-error">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <strong>Oh snap!</strong> Whats wrong with you?
+        </div>
+        <div class="alert alert-success">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <strong>Well done!</strong> Now you are listening me :)
+        </div> -->
+
+        <br />
+
+        <form id="form2" class="form-horizontal row-fluid" method="post" action="/clusterForm" name="myForm2">
+
+          <div class="control-group">
+            <label class="control-label" for="basicinput">Cluster Name *</label>
+            <div class="controls">
+              <input data-title="A tooltip for the input" type="text" placeholder="Enter the Cluster name…" data-original-title="" class="span8 tip" name="clusterName" ng-model="clusterName" required>
+              <span ng-show="myForm2.clusterName.$untouched && myForm2.clusterName.$invalid"></span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="basicinput">Cluster Build *</label>
+            <div class="controls">
+              <input type="text" id="basicinput" placeholder="Select Build name here..." class="span8" name="build" ng-model="build" required>
+              <span ng-show="myForm2.build.$untouched && myForm2.build.$invalid"></span>
+              <span class="help-inline"></span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="basicinput">Cluster Patch</label>
+            <div class="controls">
+              <input type="text" id="basicinput" placeholder="Select the Patch here..." class="span8" name="patch">
+
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="basicinput">Repo Disk *</label>
+            <div class="controls">
+              <input data-title="A tooltip for the input" type="text" placeholder="Enter the Repo Disk name…" data-original-title="" class="span8 tip" name="repoDisk" ng-model="repoDisk" required>
+              <span ng-show="myForm2.repoDisk.$untouched && myForm2.repoDisk.$invalid"></span>
+            </div>
+          </div>
+
+
+          <div class="control-group">
+            <label class="control-label" for="basicinput">Email ID *</label>
+            <div class="controls">
+              <input data-title="A tooltip for the input" type="text" placeholder="Enter the Email IDs…" data-original-title="" class="span8 tip" name="mailID" ng-model="mailID" required>
+              <span ng-show="myForm2.mailID.$untouched && myForm2.mailID.$invalid"></span>
+            </div>
+          </div>
+
+
+
+          <div class="control-group">
+            <label class="control-label" for="basicinput">VIOS List *</label>
+            <div class="controls">
+              <input data-title="A tooltip for the input" type="text" placeholder="Enter the VIOS names…" data-original-title="" class="span8 tip" name="viosName" ng-model="viosName" required>
+              <span ng-show="myForm2.viosName.$untouched && myForm2.viosName.$invalid"></span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="basicinput">Master Node *</label>
+            <div class="controls">
+              <input data-title="A tooltip for the input" type="text" placeholder="Enter the Master Node name…" data-original-title="" class="span8 tip" name="masterNode" ng-model="masterNode" required>
+              <span ng-show="myForm2.masterNode.$untouched && myForm2.masterNode.$invalid"></span>
+            </div>
+          </div>
+
+
+          <div class="control-group">
+            <label class="control-label" for="basicinput">ROOTVG Disk</label>
+            <div class="controls">
+              <input data-title="A tooltip for the input" type="text" placeholder="Enter the rootvg disks…" data-original-title="" class="span8 tip" name="rootvg"  ng-model="rootvg" required>
+              <span ng-show="myForm2.rootvg.$touched && myForm2.rootvg.$invalid"></span>
+            </div>
+          </div>
+
+
+          <!-- <div class="control-group">
+            <label class="control-label" for="basicinput">Number of VIOS</label>
+            <div class="controls">
+              <div class="dropdown">
+                <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">Select the number... <i class="icon-caret-down"></i></a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                  <li><a href="#">1</a></li>
+                  <li><a href="#">2</a></li>
+                  <li><a href="#">3</a></li>
+                  <li><a href="#">4</a></li>
+                  <li><a href="#">5</a></li>
+                  <li><a href="#">6</a></li>
+                  <li><a href="#">7</a></li>
+                  <li><a href="#">8</a></li>
+                  <li><a href="#">9</a></li>
+                  <li><a href="#">10</a></li>
+                  <li><a href="#">11</a></li>
+                  <li><a href="#">12</a></li>
+                </ul>
+              </div>
+            </div>
+          </div> -->
+
+
+          <!-- <div class="control-group" ng-controller="logDataCtrl">
+            <label>{{myData.catergoryName}}</label>
+              <select id="my-selects" name="character" multiple="multiple" ng-repeat="x in myData.cec">
+                X is {{x}}
+                <optgroup label="The Griffins">
+                    <option ng-repeat="y in x.vios">{{y.name}}</option>
+                </optgroup>
+              </select>
+              <li ng-repeat="x in myData.cec">
+                cec_name{{ x.cec_name }}
+                <ul>
+                  <li ng-repeat="y in x.vios">
+                    Name : {{y.name}}
+                  </li>
+                </ul>
+              </li>
+          </div> -->
+
+
+
+          <!-- <div ng-controller="logDataCtrl">
+              <label>{{mydata.catergoryName}}</label>
+                  <ul>
+                    <li ng-repeat="x in myData.cec">
+                      cec_name{{ x.cec_name }}
+                      <ul>
+                        <li ng-repeat="y in x.vios">
+                          Name : {{y.name}}
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+          </div> -->
+
+
+
+
+
+
+
+<!--
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" class="btn" form="form1">Submit Form</button>
+              <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>Well done!</strong> Now you are listening me :)
+              </div>
+            </div>
+            </div> -->
+
+            <div class="control-group">
+                <button type="submit" class="btn btn-primary" form="form2">Submit Form</button>
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    Success! message sent successfully.
+                </div>
+
+                <div class="alert alert-error">
+                  <button type="button" class="close" data-dismiss="alert">×</button>
+                  <strong>Oh snap!</strong> Whats wrong with you?
+                </div>
+
+        </form>
+        </div>
+    </div>
+  </div>
+
+
+
+</div><!--/.content-->
+
+<script type="text/javascript">
+  $(function() {
+      // initialize sol
+      if (window.console) console.log('foo');
+      $('#my-select').searchableOptionList();
+  });
+</script>
+
+<script>
+           function ShowMessage() {
+               var result = confirm("Do your want to submit form?");
+               if (result) {
+                   return true;
+               } else {
+                   return false;
+               }
+           }
+       </script>
+
+       <script type="text/javascript">
+          $(document).ready(function(){
+              $('button').click(function(){
+              $('.alert').show()
+              })
+          });
+
+       </script>

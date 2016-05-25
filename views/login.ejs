@@ -1,0 +1,47 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSP Tool</title>
+    <link type="text/css" href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link type="text/css" href="css/theme.css" rel="stylesheet">
+    <link type="text/css" href="images/icons/css/font-awesome.css" rel="stylesheet">
+    <link type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600' rel='stylesheet'>
+    <link rel="stylesheet" href="css/sol.css">   <!-- multiselect css -->
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-route.min.js"></script> -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+    <script type="text/javascript" src="/scripts/controller.js"></script>
+    <script type="text/javascript" src="/scripts/babble.js"></script>
+    <script type="text/javascript" src="/scripts/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/scripts/sol.js"></script>
+    <script type="text/javascript" src="/scripts/datatables/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.4.0/showdown.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.4.0/showdown.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.10/ngStorage.min.js"></script>
+
+</head>
+
+<body>
+
+<form class="form-signin" ng-controller="loginController">
+  {{message}}
+  <h2 class="form-signin-heading">Sign In</h2>
+  <label for="inputUsername" class="sr-only">Username</label>
+  <input type="text" id="Username" class="form-control" placeholder="Username" required autofocus name="username">
+  <label for="inputPassword" class="sr-only">Password</label>
+  <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name="password">
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" value="remember-me"> Remember me
+    </label>
+  </div>
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+</form>
+
+</body>
