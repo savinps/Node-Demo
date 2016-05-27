@@ -114,16 +114,24 @@ router.post('/historyp',function(req,res,next){
   console.log(logDir);
   console.log("Json Array for log files");
   var log_files = getFiles('SSP_Logs/'+logDir);
-
+  console.log("Length of Log Folder"+log_files.length);
   for (var i = 0; i < log_files.length; i++){
     // look for the entry with a matching `code` value
-    if (log_files[i].filename.indexOf(viosName) == -1){
-      console.log(log_files[i].filename);
+    console.log(log_files[i].filename);
+    console.log(log_files[i].filename.indexOf(viosName));
+    var indexValue;
+    indexValue= log_files[i].filename.indexOf(viosName);
+    if ( indexValue== -1){
+      console.log("Sliced file:"+log_files[i].filename);
       log_files.splice(i,1);
+      console.log("Length of FOlder:"+log_files.length);
+      i=i-1;
 
     }
+
   }
   console.log("After splicing");
+  console.log("Length of Log Folder"+log_files.length);
   console.log(log_files);
   //res.send(getFiles('SSP_Logs/'+logDir));
   res.send(log_files);

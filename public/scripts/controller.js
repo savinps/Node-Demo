@@ -1,4 +1,4 @@
-var mainApp = angular.module('mainApp', ['ngRoute','ngStorage']);
+var mainApp = angular.module('mainApp', ['ngRoute','ngStorage','angularjs-dropdown-multiselect','ngTable','wt.responsive']);
 //console.log("In mainApp module");
 
 angular.module('mainApp').filter("myFilter", function(){
@@ -119,8 +119,64 @@ angular.module('mainApp').controller('viosListCtrl', function($scope, $location)
 });
 
 angular.module('mainApp').controller('viosFormController', function($scope, $http, $location,$localStorage, $rootScope) {
-  //console.log("In ViosForm controller");
-//  $scope.data = [];
+  var jsonArr = [];
+
+  $http.get("build.json").then(function (response) {
+      console.log("Got build data");
+      $scope.myData = response.data;
+
+      console.log($scope.myData);
+  });
+
+  $http.get("data4.json").then(function (response) {
+      console.log("Got vios list data");
+      $scope.viosData = response.data;
+
+      console.log($scope.viosData);
+
+
+      for (var i = 0; i < $scope.viosData.length; i++) {
+    jsonArr.push({
+        id: i,
+        label: $scope.viosData[i].node
+    });
+}
+
+  console.log("JSON Array:");
+  console.log(jsonArr);
+
+  });
+
+/// Multi select parameter
+
+      $scope.example13model = [];
+              // $scope.example13data =  [
+              //     {id: 1, label: "David"},
+              //     {id: 2, label: "Jhon"},
+              //     {id: 3, label: "Lisa"},
+              //     {id: 4, label: "Nicole"},
+              //     {id: 5, label: "Danny"}];
+
+      $scope.example13data = jsonArr;
+      console.log("Multiselect Data");
+      console.log($scope.example13data);
+              $scope.example13settings = {
+                  smartButtonMaxItems: 10,
+                  smartButtonTextConverter: function(itemText, originalItem) {
+                      if (itemText === 'Jhon') {
+                      return 'Jhonny!';
+                      }
+
+                      return itemText;
+                  }
+              };
+
+
+////////
+
+console.log("New VIOS list:"+$scope.example13model);
+
+
  $scope.viosQueue;
 var email;
 
@@ -136,18 +192,37 @@ var email;
 
     // ////// Storing in Global Variables
     //
-    $rootScope.viosName = $scope.viosName;
+    $rootScope.viosName='';
+    //$rootScope.viosName = $scope.viosName;
     $rootScope.mailID = $scope.mailID;
-    $rootScope.build = $scope.build;
+    $rootScope.build = $scope.build.build;
     $rootScope.rootvg = $scope.rootvg;
     $rootScope.patch = $scope.patch;
+    console.log("Build:"+$rootScope.build);
+    console.log("Updated VIOS LIST:");
 
 
-    // var entryV = JSON.stringify({vEntry:entryString});
-    // console.log(entryV);
+    for (var i = 0; i < $scope.example13model.length; i++){
+      console.log($scope.example13model[i].id);
+      for (var j = 0; j < jsonArr.length; j++){
+
+          if($scope.example13model[i].id == jsonArr[j].id){
+
+            $rootScope.viosName = $rootScope.viosName+jsonArr[j].label+" ";
+            console.log($rootScope.viosName);
+
+          }
+
+      }
+
+   }
+
+$rootScope.viosName=$rootScope.viosName.trim();
+
+
     $http({ method: 'POST',
             url: '/form',
-          data: {'viosName':$scope.viosName,'mailID':$scope.mailID,'build':$scope.build,'rootvg':$scope.rootvg,'patch':$scope.patch}
+          data: {'viosName':$rootScope.viosName,'mailID':$scope.mailID,'build':$rootScope.build,'rootvg':$scope.rootvg,'patch':$scope.patch}
             //data: {'name':'savin'}
           })
           .then(function(resp){
@@ -165,25 +240,9 @@ var email;
             }
 
 
-            // localStorage.setItem("scriptLogs",resData);
-            // var value=localStorage.getItem("lastname");
-            // console.log("got folder value"+ value);
 
-    //         if ($scope.scriptLogs)
-    //         substring = "SSP";
-    //         console.log(string.indexOf(substring) > -1);
-    //         // $scope.logDetails = resData;
-    //         //
-    //         //               console.log("http log data")
-    //         //                return (resp.data);
            });
-    // // $http.post('/viosListp',entryV).
-    // //     success(function(data) {
-    //         console.log("posted successfully");
-    //     }).error(function(data) {
-    //         console.error("error in posting");
-    //     })
-  //  $location.path('/form2');
+
 };
 //
 $scope.saveData =  function() {
@@ -334,11 +393,11 @@ angular.module('mainApp').controller('viosListController', function ($scope,$htt
 });
 
 
-angular.module('mainApp').controller('logDataCtrl', function($scope, $http) {
+angular.module('mainApp').controller('logDataCtrl', function($scope, $http, $filter, ngTableParams) {
   console.log("In logDataCtrl");
 
 
-
+  $scope.toggle = true;
 
 
   $http.get("data.json").then(function (response) {
@@ -346,12 +405,50 @@ angular.module('mainApp').controller('logDataCtrl', function($scope, $http) {
       $scope.myData = response.data;
   });
 
-
+  var tableArr = [];
   $http.get("data3.json").then(function (response) {
       console.log("http success");
       $scope.myData2 = response.data;
-      console.log($scope.myData2);
+
+      for (var i = 0; i < $scope.myData2.length; i++) {
+          tableArr.push({
+              "id": i,
+              "viosName": $scope.myData2[i].viosName,
+              "build": $scope.myData2[i].build,
+              "emailID": $scope.myData2[i].emailID,
+              "date": $scope.myData2[i].date,
+              "status": $scope.myData2[i].status,
+              "LogFiles": $scope.myData2[i].LogFiles
+
+
+
+          });
+      }
+
+      // tableArr=$scope.myData2;
+      //console.log($scope.myData2);
+      console.log("Table Array");
+      console.log(tableArr);
+
+      $scope.usersTable = new ngTableParams({
+                    page: 1,
+                    count: 10
+                }, {
+                    total: tableArr.length,
+                    getData: function ($defer, params) {
+                      $scope.data = params.sorting() ? $filter('orderBy')(tableArr, params.orderBy()) : tableArr;
+                      $scope.data = params.filter() ? $filter('filter')($scope.data, params.filter()) : $scope.data;
+                        $scope.data = $scope.data.slice((params.page() - 1) * params.count(), params.page() * params.count());
+                        $defer.resolve($scope.data);
+                    }
+                });
+
+
   });
+
+
+
+
   $http.get("data4.json").then(function (response) {
       console.log("http success");
       $scope.myData4 = response.data;
@@ -381,6 +478,7 @@ angular.module('mainApp').controller('logDataCtrl', function($scope, $http) {
 
                           console.log("http log data")
                            return (resp.data);
+
           });
     // console.log($scope.LogFiles);
     // obj = JSON.parse(str)

@@ -21,11 +21,14 @@
 
         <br />
 
+
+
         <form id="form1" class="form-horizontal row-fluid"  name="myForm">
           <div class="control-group">
             <label class="control-label" for="basicinput">VIOS Build *</label>
             <div class="controls">
-              <input type="text" id="basicinput" placeholder="Enter Build name here..." class="span8" name="build" ng-model="build" required>
+              <!-- <input type="text" id="basicinput" placeholder="Enter Build name here..." class="span8" name="build" ng-model="build" required> -->
+              <select placeholder="Enter Build name here..." class="span8" name="build" ng-model="build" required ng-options="x.build for x in myData"> </select>
               <span ng-show="myForm.build.$untouched && myForm.build.$invalid"></span>
               <span class="help-inline"></span>
             </div>
@@ -49,7 +52,9 @@
           <div class="control-group">
             <label class="control-label" for="basicinput">VIOS List *</label>
             <div class="controls">
-              <input data-title="A tooltip for the input" type="text" placeholder="Enter the VIOS names…" data-original-title="" class="span8 tip" name="viosName" ng-model="viosName" required>
+              <!-- <input data-title="A tooltip for the input" type="text" placeholder="Enter the VIOS names…" data-original-title="" class="span8 tip" name="viosName" ng-model="viosName" required> -->
+
+              <div ng-dropdown-multiselect="" options="example13data" selected-model="example13model" extra-settings="example13settings" class="span8 tip" name="viosName" ng-model="viosName" required></div>
               <span ng-show="myForm.viosName.$untouched && myForm.viosName.$invalid"></span>
             </div>
           </div>
@@ -152,7 +157,7 @@
 
 
         </form>
-        <input type="button" value="submit"  ng-click = " getScriptLogs()" ng-controller = "viosForm2Ctrl">
+        <input type="button" value="submit" class="btn btn-success" ng-click = " getScriptLogs()" ng-controller = "viosForm2Ctrl">
         <!-- <button type="button" name="button"> Load Data</button> -->
         <!-- <a href="" ng-click = "submit()"> -->
 

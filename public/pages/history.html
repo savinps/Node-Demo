@@ -1,12 +1,13 @@
 <div class="module">
     <div class="module-head">
         <h3>
-            DataTables</h3>
+            VIOS INSTALLATION STATUS TABLE</h3>
     </div>
     <div class="module-body table" ng-controller="logDataCtrl">
+      <!-- <strong> VIOS NAME: <input type="text" name="name" value="" ng-model="search.viosName" placeholder="Filter using VIOS.." class="span4"></strong> -->
         <table cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped	 display table-hover"
-            width="100%" datatable="ng" >
-            <thead>
+            width="100%" datatable="ng" ng-table="usersTable"  show-filter="true"  wt-responsive-table>
+            <!-- <thead>
                 <tr >
                     <th>
                         No.
@@ -31,38 +32,39 @@
                     </th>
 
                 </tr>
-            </thead>
-            <tbody>
-                <tr class="odd gradeX" ng-repeat="x in myData2">
-                  <td>
-                      {{$index}}
+            </thead> -->
+            <!-- <tbody> -->
+                <tr class="odd gradeX" ng-repeat="x in data">
+                  <td title="'ID'" sortable="'id'">
+                      {{x.id}}
                   </td>
-                    <td>
+                    <td title="'VIOS Name'" sortable="'viosName'" filter="{ 'viosName': 'text' }">
+                    <!-- <td> -->
                         {{x.viosName}}
                     </td>
-                    <td>
+                    <td title="'VIOS Build'" filter="{ 'build': 'text' }">
                         {{x.build}}
                     </td>
-                    <td class="center">
+                    <td class="center" title="'VIOS Patch'">
                         {{x.patch}}
                     </td>
-                    <td class="center">
+                    <td class="center" title="'Email ID'">
                         {{x.emailID}}
                     </td>
-                    <td class="center">
+                    <td class="center" title="'Date'">
                         {{x.date}}
                     </td>
-                    <td> <a class="center" href="" ng-click="getLogDetails(x.viosName,x.LogFiles)" class="btn btn-primary">
+                    <td> <a class="center" href="" ng-click="getLogDetails(x.viosName,x.LogFiles)" ng-model="showLog" class="btn btn-primary" title="'Log Folder'">
                         {{x.LogFiles}} </a>
                         <!-- <span>{{logDetails}}</span> -->
                     </td>
                 </tr>
 
 
-            </tbody>
+            <!-- </tbody> -->
         </table>
 
-          <div class="module-body"
+          <div class="module-body" ng-show="showLog" ng-hide="hideLog">
 
 
           <ul ng-repeat="(fileIndex,file) in logDetails">
@@ -95,6 +97,8 @@
             </div>
             </div>
         </ul>
+
+          <button ng-model="hideLog">Close</button>
         </div>
 
     <!-- <div class="module-body"

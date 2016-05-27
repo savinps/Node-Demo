@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SSP Tool</title>
     <link type="text/css" href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link type="text/css" href="bootstrap/css/bootstrap.css" rel="stylesheet"> -->
     <link type="text/css" href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
     <link type="text/css" href="css/theme.css" rel="stylesheet">
     <link type="text/css" href="images/icons/css/font-awesome.css" rel="stylesheet">
     <link type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600' rel='stylesheet'>
     <link rel="stylesheet" href="css/sol.css">   <!-- multiselect css -->
-
+    <link rel="stylesheet" href="https://rawgit.com/esvit/ng-table/master/dist/ng-table.min.css">
+    <link rel="stylesheet" href="/css/angular-responsive-tables.min.css" >
+    <link rel="stylesheet" href="/css/angular-responsive-tables.css" >
 
 </head>
 
@@ -223,7 +226,11 @@
     </div>
   </div><!--/.container-->
 </div><!--/.wrapper-->
-
+<div class="footer">
+    <div class="container">
+        <b class="copyright">&copy; 2016 ISST Tool - IBM </b>All rights reserved.
+    </div>
+</div>
 
 
 
@@ -239,11 +246,18 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/scripts/sol.js"></script>
     <script type="text/javascript" src="/scripts/datatables/jquery.dataTables.js"></script>
-    
+    <script type="text/javascript" src="/scripts/angularjs-dropdown-multiselect.js"></script>
+    <script type="text/javascript" src="/scripts/lodash.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.4.0/showdown.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.4.0/showdown.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.10/ngStorage.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+    <script src="https://rawgit.com/esvit/ng-table/master/dist/ng-table.min.js"></script>
+    <script type="text/javascript" src="/scripts/angular-responsive-tables.min.js"></script>
+    <script type="text/javascript" src="/scripts/angular-responsive-tables.js"></script>
+
+
     <script>
   		$(document).ready(function() {
   			$('.datatable-1').dataTable();
