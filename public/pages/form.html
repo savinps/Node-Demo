@@ -20,8 +20,41 @@
         </div> -->
 
         <br />
+        <div class="">
+        <p>
+          Please read the guidelines before submitting the form.
+          <input type="button" value="Click.." class="btn btn-success" data-toggle="modal" data-target="#myModal1">
+        </p>
 
+                   <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                   <div class="modal-dialog" role="document">
+                     <div class="modal-content">
+                       <div class="modal-header">
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                           <span aria-hidden="true">&times;</span>
+                         </button>
+                         <h4 class="modal-title" id="myModalLabel">Guidelines</h4>
+                       </div>
+                       <div class="modal-body">
+                         <ol>
+                           <li>Make sure that HMC and VIOS are UP before submitting the form</li>
+                           <li>Create or Update the VIOS details with correct HMC and Managed System name before submitting the form</li>
+                           <li>Check the result of Ping Test after submitting the form.</li>
+                           <li>For VIOS which are down default installation will be done on hdisk0. Click the proper option once you get the message.</li>
+                           <li>While filling the rootvg disk field, please enter the value in the format viosname_rootvgDisk (eg. beev1_hdisk).</li>
+                           <li>After confirming the installation procedure, go to VIOS Install Table to see the installation logs.</li>
+                         </ol>
+                        </div>
+                       <div class="modal-footer">
+                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
+                       </div>
+                     </div>
+                   </div>
+                   </div>
+
+        </div>
+          <br>
 
         <form id="form1" class="form-horizontal row-fluid"  name="myForm">
           <div class="control-group">
@@ -157,12 +190,12 @@
 
 
         </form>
-        <input type="button" value="submit" class="btn btn-success" ng-click = " getScriptLogs()" ng-controller = "viosForm2Ctrl">
+        <input type="button" value="submit" class="btn btn-success  btn btn-large" ng-click = "showsub=true; getScriptLogs()" ng-controller = "viosForm2Ctrl" ng-hide="showsub">
         <!-- <button type="button" name="button"> Load Data</button> -->
         <!-- <a href="" ng-click = "submit()"> -->
 
-        <div>
-          {{stats}}
+        <div class="text-success">
+          <strong>{{stats}}</strong>
         </div>
 
         </div>

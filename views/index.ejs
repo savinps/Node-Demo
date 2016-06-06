@@ -12,6 +12,8 @@
     <link type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600' rel='stylesheet'>
     <link rel="stylesheet" href="css/sol.css">   <!-- multiselect css -->
     <link rel="stylesheet" href="https://rawgit.com/esvit/ng-table/master/dist/ng-table.min.css">
+    <!-- <link type="text/css" rel="stylesheet" href="https://raw.githubusercontent.com/esvit/ng-table/master/dist/ng-table.min.css"> -->
+
     <link rel="stylesheet" href="/css/angular-responsive-tables.min.css" >
     <link rel="stylesheet" href="/css/angular-responsive-tables.css" >
 
@@ -30,8 +32,8 @@
         </a>
 
       <div class="nav-collapse collapse navbar-inverse-collapse">
-        <ul class="nav nav-icons">
-          <li class="active"><a href="#">
+         <ul class="nav nav-icons">
+          <!-- <li class="active"><a href="#">
             <i class="icon-envelope"></i>
           </a></li>
           <li><a href="#">
@@ -65,13 +67,13 @@
           <li><a href="#">
             Support
           </a></li>
-          <li class="nav-user dropdown">
+           <li class="nav-user dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="images/user.png" class="nav-avatar" />
               <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
-              <li><a href="#">Your Profile</a></li>
+               <li><a href="#">Your Profile</a></li>
               <li><a href="#">Edit Profile</a></li>
               <li><a href="#">Account Settings</a></li>
               <li class="divider"></li>
@@ -216,6 +218,9 @@
 
           </ul>
 
+
+
+
         </div><!--/.sidebar-->
       </div><!--/.span3-->
 
@@ -243,7 +248,7 @@
     <script type="text/javascript" src="/scripts/babble.js"></script>
     <script type="text/javascript" src="/scripts/jquery-1.9.1.min.js"></script>
     <script src="scripts/jquery-ui-1.10.1.custom.min.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- <script src="bootstrap/js/bootstrap.min.js"></script> -->
     <script type="text/javascript" src="/scripts/sol.js"></script>
     <script type="text/javascript" src="/scripts/datatables/jquery.dataTables.js"></script>
     <script type="text/javascript" src="/scripts/angularjs-dropdown-multiselect.js"></script>
@@ -256,15 +261,34 @@
     <script src="https://rawgit.com/esvit/ng-table/master/dist/ng-table.min.js"></script>
     <script type="text/javascript" src="/scripts/angular-responsive-tables.min.js"></script>
     <script type="text/javascript" src="/scripts/angular-responsive-tables.js"></script>
+    <script type="text/javascript">
+    function toggleChevron(e) {
+      $(e.target)
+        .prev('.panel-heading')
+        .find("i.indicator")
+        .toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+      }
+      $('#accordion').on('hidden.bs.collapse', toggleChevron);
+      $('#accordion').on('shown.bs.collapse', toggleChevron);
+    </script>
+
 
 
     <script>
+
   		$(document).ready(function() {
   			$('.datatable-1').dataTable();
   			$('.dataTables_paginate').addClass("btn-group datatable-pagination");
   			$('.dataTables_paginate > a').wrapInner('<span />');
   			$('.dataTables_paginate > a:first-child').append('<i class="icon-chevron-left shaded"></i>');
   			$('.dataTables_paginate > a:last-child').append('<i class="icon-chevron-right shaded"></i>');
+$('.collapse').click(function(){
+  $('.collapsed').toggleClass('collapse collapsed');
+$('#togglePages2').attr('aria-expanded','false');
+  //alert('sfs');
+
+});
+
   		} );
   	</script>
 

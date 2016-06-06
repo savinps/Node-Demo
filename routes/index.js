@@ -1,8 +1,12 @@
 var express=require('express');
 var fs = require('fs');
+var fsmonitor = require('fsmonitor');
 var nodemailer = require('nodemailer');
+//var chokidar = require('chokidar');
 var nl2br = require('nl2br');
 var Promise = require('promise');
+var Q = require('q');
+var schedule = require('node-schedule');
 var configFile = fs.readFileSync('./public/data3.json');
 var config = JSON.parse(configFile);
 var clusterFile = fs.readFileSync('./public/clusterdata3.json');
@@ -12,26 +16,235 @@ var nodeList = JSON.parse(nodeFile);
 var execProcess = require("../exec_process.js");
 router=express.Router();
 
+var fileChanges= fsmonitor.watch('./SSP_Logs', null, function(change) {
+    console.log("Change detected in SSP Logs folder:\n" + change);
+    console.log("Changed happened in SSP Folder");
+    console.log("Added folders:    %j", change.addedFolders);
+    });
+
+//     var j = schedule.scheduleJob('/1 * * * *', function(){
+//   console.log('The answer to life, the universe, and everything!');
+// });
+
+var CronJob = require('cron').CronJob;
+new CronJob('10 * * * * *', function() {
+  console.log('Checking file status');
+  statusCheck();
+}, null, true, 'America/Los_Angeles');
+
+
+// function async() {
+//   console.log("Async1 called first");
+//   return Q.delay(1000)
+// }
+//
+// async()
+// .then(function() {
+//     console.log('Hurray!!!async called back');
+// });
+
+// Watch the sim directory
+// fs.watch("SSP_Logs/hello.txt", { persistent: true }, function (event, fileName) {
+//   console.log("Event: " + event);
+//   console.log(fileName + "\n");
+// });
+
+
+function statusCheck() {
+    console.log("Checking status");
+    for(var j=0; j<config.length; j++)
+      {
+
+        console.log("Files of vios:"+config[j].viosName);
+
+        var log_files = getFiles('SSP_Logs/'+config[j].LogFiles);
+            //console.log(log_files);
+            var flag1,flag2;
+            flag1=-1;
+            flag2=-1;
+        for (var i = 0; i < log_files.length; i++){
+          // look for the entry with a matching `code` value
+
+          var indexValue1,indexValue2;
+
+          indexValue1= log_files[i].filename.indexOf("RUN_LOG");
+          indexValue2= log_files[i].filename.indexOf("PROGRESS_LOG_"+config[j].viosName);
+
+            if (indexValue1!= -1 ) {
+              flag1=i;
+            }
+            if (indexValue2!= -1 ) {
+              flag2=i;
+            }
+          }
+
+
+          console.log(flag1);
+          console.log(flag2);
+          if (flag1 != -1 ){
+              // console.log("check");
+              // console.log("VIOS "+config[j].viosName+" BACKUP IS DONE SUCESSFULLY");
+              // console.log(log_files[flag1].logContent);
+              console.log(log_files[flag1].logContent.indexOf("VIOS "+config[j].viosName+" BACKUP IS DONE SUCESSFULLY"));
+            if (log_files[flag1].logContent.indexOf("VIOS "+config[j].viosName+" BACKUP IS DONE SUCESSFULLY") != -1) {
+
+                config[j].status="BackUp Done(Running)";
+                console.log("BackUp Done(Running)");
+
+                //indexValue= log_files[flag2].filename.indexOf("PROGRESS_LOG_"+config[j].viosName);
+                if (flag2 != -1) {
+
+                  if (log_files[flag2].logContent.indexOf("NIM RESOURCE ALLOCATION FOR THE SET: "+config[j].viosName+" COMPLETED") != -1){
+                      config[j].status="NIM Done(Running)";
+                      console.log("Nim Done(Running)");
+
+                      if (log_files[flag2].logContent.indexOf("INSTALLATION INITIATION FOR THE SET: "+config[j].viosName+" COMPLETED") != -1) {
+                        config[j].status="Installation Done(Running)";
+
+                        if (log_files[flag2].logContent.indexOf("WAITING FOR SET: "+config[j].viosName+" SUCCESSFUL") != -1) {
+                          config[j].status="Up after Installation(Running)";
+
+                              if (log_files[flag2].logContent.indexOf("POST INSTALL SETUP FOR SET: "+config[j].viosName+" SUCCESSFUL.") != -1) {
+                                config[j].status="PostConfig Done(Running)";
+
+                                  if (log_files[flag2].logContent.indexOf("WAITING FOR SET: "+config[j].viosName+" FAILED") != -1){
+                                    config[j].status="Down after PostConfig(FAILED)";
+                                  }
+                                  else if (log_files[flag2].logContent.indexOf("WAITING FOR SET POST CONFIG: "+config[j].viosName+" SUCCESSFUL") != -1) {
+                                    config[j].status="Up after PostConfig(Running)";
+
+                                        if(log_files[flag2].logContent.indexOf("VIOS backup restore on "+config[j].viosName+" SUCCESSFUL") != -1) {
+                                          config[j].status="Restore Done(Running)";
+
+                                          if(log_files[flag2].logContent.indexOf("VIOS RESTORE FOR "+config[j].viosName+" COMPLETED") != -1) {
+                                            config[j].status="SUCCESS";
+                                          }
+
+                                        }
+                                        else if (log_files[flag2].logContent.indexOf("restore on "+config[j].viosName+" Failed") != -1) {
+                                          config[j].status="Restore Issue(FAILED)";
+                                        }
+                                  }
+                              }
+                              else if (log_files[flag2].logContent.indexOf("POST INSTALL SETUP FAILED FOR "+config[j].viosName) != -1) {
+                                config[j].status="PostConfig Issue(FAILED)";
+                              }
+
+                        }
+                        else if (log_files[flag2].logContent.indexOf("WAITING FOR SET: "+config[j].viosName+" FAILED") != -1) {
+                          config[j].status="Down after Install(FAILED)";
+                        }
+                      }
+                      else if (log_files[flag2].logContent.indexOf("Installation on SET "+config[j].viosName+" timed out") != -1){
+                        config[j].status="Installation Issue(FAILED)";
+                      }
+                      else if (log_files[flag2].logContent.indexOf("INSTALLATION INITIATION FOR THE SET: "+config[j].viosName+" FAILED") != -1) {
+                        config[j].status="Installation Issue(FAILED)";
+                      }
+
+                  }
+                  else if (log_files[flag2].logContent.indexOf("Nim Master doesnt not contain "+config[j].build) != -1){
+                      config[j].status="NIM Issue(FAILED)";
+                  }
+                  else if (log_files[flag2].logContent.indexOf("Nim Resource allocation Failed for "+config[j].viosName) != -1) {
+                      config[j].status="NIM Issue(FAILED)";
+                  }
+                  else if (log_files[flag2].logContent.indexOf("Nim Allocation for "+config[j].viosName+" timed out ...") != -1) {
+                      config[j].status="NIM Issue(FAILED)";
+                  }
+                }
+            }
+
+            else if (log_files[flag1].logContent.indexOf("VIOS "+config[j].viosName+" BACKUP FAILED") != -1) {
+                config[j].status="Backup Issue(FAILED)";
+            }
+            // else{
+            //     config[j].status="INVALID";
+            // }
+
+
+          }
+          else {
+            config[j].status="INVALID";
+          }
+
+
+
+        console.log(config[j].status);
+      }
+
+      var configJSON = JSON.stringify(config);
+      fs.writeFileSync('./public/data3.json', configJSON);
+}
+
+
+    //console.log(fileChanges);
+
+    // var readableStream = fs.createReadStream('./public/data4.json');
+    // var data = '';
+    //
+    // readableStream.setEncoding('utf8');
+    //
+    // readableStream.on('data', function(chunk) {
+    //     data+=chunk;
+    //     console.log(data);
+    // });
+
+    // readableStream.on('end', function() {
+    //     console.log(data);
+    // });
+
+
+//     fs.watch("/SSP_Logs", { persistent: true }, function (event, fileName) {
+//   console.log("Event: " + event);
+//   console.log(fileName + "\n");
+// });
+
+function readStream (filename) {
+      var readableStream = fs.createReadStream(filename);
+      var data = 'hello';
+
+      readableStream.setEncoding('utf8');
+
+    readableStream.on('data', function(chunk) {
+                data+=chunk;
+
+              });
+  var textdata=readableStream.on('end', function() {
+                console.log(data);
+              });
+
+      return data;
+
+}
+
 function getFiles (dir, files_){
     files_ = files_ || [];
     var files = fs.readdirSync(dir);
     var jsonArr = [];
   ////////////////////////////////////////
     for (var i in files){
-        console.log(i);
+        //console.log(i);
         var name = dir + '/' + files[i];
       //  var name = files[i];
-        var text = fs.readFileSync(name,'utf8');
-      //  console.log (text);
-        //var name = nl2br(name);
-        //var name =name.replace(/[^a-zA-Z ]/g, "");
-        jsonArr.push({filename: name , logContent: text});
+     var text = fs.readFileSync(name,'utf8');
 
-        if (fs.statSync(name).isDirectory()){
-            getFiles(name, files_);
-        } else {
-            files_.push(name,text);
-        }
+
+
+
+      //  var text = readStream(name);
+
+
+          jsonArr.push({filename: name , logContent: text});
+
+          if (fs.statSync(name).isDirectory()){
+              getFiles(name, files_);
+          } else {
+              files_.push(name,text);
+          }
+
+
+
     }
     ////////////////////////////////////////////////////////////////////
     //return files_;
@@ -77,12 +290,44 @@ function getFiles (dir, files_){
     return jsonArr;
 }
 
+
+
+
 router.get('/',function(req,res,next){
+  console.log("success");
+  res.render('login',{
+    title:'SSP_Tool - Login',
+    classname:'login'
+  });
+});
+router.get('/home',function(req,res,next){
   console.log("success");
   res.render('index',{
     title:'SSP_Tool - Home',
-    classname:'Home'
+    classname:'home'
   });
+});
+
+router.post('/',function(req,res,next){
+  console.log("login success");
+  console.log(req.body);
+  var username = req.body.username;
+    var password = req.body.password;
+    var auth;
+    if (username =="admin" && password == "abc123") {
+      //res.redirect('/home');
+      console.log("Got Access");
+      auth="Logged in successfully"
+    }
+    else {
+      console.log("Invalid Credentails");
+      auth="Invalid Credentails";
+      //res.redirect('/');
+    }
+
+    res.send(auth);
+
+
 });
 
 
@@ -196,6 +441,40 @@ router.post('/form2',function(req,res,next){
     console.log(today);
     console.log(cur_time);
 
+
+    ///// Deleting the older input file
+      execProcess.result("rm input_file.txt", function(err, response){
+
+          console.log("Deleting Input File");
+        	if(!err){
+            console.log("success");
+        	}
+          else {
+        		console.log(err);
+        	}
+        });
+
+    /// Creating input file
+      var input_file = "NODES : " + viosname +"\n"
+                        + "BUILD : " + build + "\n"
+                        +"SSP PATCH : " + patch + "\n"
+                        +"ROOTVG DISKS : " + rootvg + "\n"
+                        +"EMAIL ID : " + mailid + "\n"
+                        +"NIM MASTER : " + "\n"
+                        +"MASTER NODE : " +"\n"
+                        +"REPO DISK : " +"\n";
+      console.log("Here is the input file \n" + input_file);
+
+      fs.writeFile("input_file.txt", input_file, function(err) {
+          if(err) {
+              return console.log(err);
+          }
+
+          console.log("The file was saved!");
+      });
+
+///////////////////////////
+
   function appendObject(obj){
 
   config.push(obj);
@@ -225,8 +504,9 @@ router.post('/form2',function(req,res,next){
 console.log("Deleting Old Entry");
 console.log(count);
 console.log(config);
-var script_output;
+var script_output='';
 //var script_output = execProcess.result("./ssp_vios_setup_trail"+commandString);
+
 execProcess.result("./ssp_vios_setup_trail -f input_file.txt", function(err, response){
 
     console.log("Invoking master script");
@@ -236,6 +516,7 @@ execProcess.result("./ssp_vios_setup_trail -f input_file.txt", function(err, res
       script_output=response;
   	}else {
   		console.log(err);
+      script_output="Error occurred while running script..";
   	}
   });
   var logFilePath;
@@ -268,7 +549,7 @@ setTimeout(function() {
             console.log(viosArray[index] + "is not present in NODES_MS_HMC.txt file");
           }
 
-        appendObject({"id":"4","viosName":viosArray[index],"build":build,"patch":patch,"emailID":mailid,"date":cur_time,"status":"Running","LogFiles":logFilePath});
+        appendObject({"id":"4","viosName":viosArray[index],"build":build,"patch":patch,"emailID":mailid,"date":cur_time,"status":"Started","LogFiles":logFilePath});
 
       }
     }
@@ -284,8 +565,38 @@ console.log("savin:"+logFilePath);
 //appendObject({"id":"4","viosName":viosname,"build":build,"patch":patch,"emailID":mailid,"date":cur_time,"status":"Running","LogFiles":logFilePath});
 //res.json({'output':'Please Help me'});
 
-var delay=70000; //7 second
+var delay=10000; //7 second
 setTimeout(function() {
+
+  console.log("See the log file path:"+logFilePath);
+  console.log("Json Array for log files");
+  var log_files = getFiles('SSP_Logs/'+logFilePath);
+
+  for (var i = 0; i < log_files.length; i++){
+    // look for the entry with a matching `code` value
+    console.log(log_files[i].filename);
+    console.log(log_files[i].filename.indexOf('RUN_LOG'));
+    var indexValue;
+    indexValue= log_files[i].filename.indexOf('RUN_LOG');
+    if ( indexValue== -1){
+      console.log("Sliced file:"+log_files[i].filename);
+      log_files.splice(i,1);
+      console.log("Length of FOlder:"+log_files.length);
+      i=i-1;
+
+    }
+
+  }
+  console.log("After splicing");
+  console.log("Length of Log Folder"+log_files.length);
+  console.log(log_files);
+  //res.send(getFiles('SSP_Logs/'+logDir));
+  if (script_output=='')
+  {
+    // script_output=log_files[0].logContent;
+    script_output="Check the logs of Installation in "+logFilePath;
+
+  }
   res.send(script_output);
 
 }, delay);
@@ -664,7 +975,7 @@ res.send("Working fine till now");
  console.log(config);
  var script_output;
  //var script_output = execProcess.result("./ssp_vios_setup_trail"+commandString);
- execProcess.result("./ssp_vios_setup_trail -f input_file.txt", function(err, response){
+ execProcess.result("./ssp_vios_setup_backup -f input_file.txt", function(err, response){
 
      console.log("Invoking master script");
     if(!err){
@@ -673,6 +984,7 @@ res.send("Working fine till now");
        script_output=response;
     }else {
       console.log(err);
+      script_output=err;
     }
    });
    var logFilePath;
@@ -814,26 +1126,61 @@ res.send("Working fine till now");
        console.log("The file was saved!");
    });
 
-   ///// Pinging the NODES
-   var ping_output = "UP";
-   var delay=10000; //7 second
-   setTimeout(function() {
-   execProcess.result("./node_ping -n "+'\"'+viosname+'\"' , function(err, response){
 
-       console.log("Pinging the nodes");
-     	if(!err){
-         console.log("success");
-         console.log(response);
-         ping_output=response;
-         res.send(ping_output);
-     	}
-       else {
-     		console.log(err);
-        res.send("Error while running script");
-     	}
-     });
+   /// backup script
+   var script_output;
+   var delay=3000;
 
-     }, delay);
+function changeResponse() {
+
+  var deferred = Q.defer();
+
+  setTimeout(function() {
+  execProcess.result("./ssp_vios_setup_backup -f input_file.txt", function(err, response){
+
+      console.log("Invoking master script");
+     if(!err){
+        console.log("success");
+       console.log(response);
+        script_output=response;
+     }else {
+       console.log(err);
+       script_output=err;
+     }
+     deferred.resolve(script_output);
+    });
+
+       }, delay);
+
+       return deferred.promise;
+}
+
+
+changeResponse().then(function(script_output){
+  ///// Pinging the NODES
+  var ping_output = "UP";
+  var delay=7000; //7 second
+  setTimeout(function() {
+  execProcess.result("./node_ping -n "+'\"'+viosname+'\"' , function(err, response){
+
+      console.log("Pinging the nodes");
+     if(!err){
+        console.log("success");
+        console.log(response);
+        ping_output=response;
+        var backPing = [{"pingData":ping_output,"backData":script_output}];
+        res.send(backPing);
+     }
+      else {
+       console.log(err);
+       res.send("Error while running script");
+     }
+    });
+
+    }, delay);
+
+})
+
 
 
 });

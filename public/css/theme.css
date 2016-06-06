@@ -1696,4 +1696,25 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', end
 	-moz-border-radius: 0 0 3px 0;
 	border-radius: 0 0 3px 0
 }
+.ng-table-pagination>li{
+	display: inline;
+}
+.ng-table-pagination>li>a{
+	position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+.ng-table-pagination {
+    display: inline-block;
+	}
+	.ng-table-pager{
+		margin-top: 20px;
+	}
+
 @media(max-width:767px){body{padding:0!important}.wrapper{padding:20px 15px}}

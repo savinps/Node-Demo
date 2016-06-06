@@ -97,8 +97,8 @@
           </div>
         </div>
       </div> -->
-
-      <div class="module" ng-controller="viosListController" ng-show="showme">
+      <div ng-controller="viosListController">
+      <div class="module"  ng-show="showme">
         <div class="module-head">
           <h3>Create or Update VIOS Details</h3>
         </div>
@@ -139,11 +139,14 @@
                    console.log(entryString);
                 </script> -->
               <div class="control-group">
-                  <button type="submit"  class="btn btn-primary" ng-click="submitForm(viosName,ms,hmc)">Add/Update</button>
-                  <div class="alert alert-success alert-dismissable">
-                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                      Success! Entry created successfully.
-                  </div>
+                  <button type="submit"  class="btn btn-primary" ng-click="showme=false; showtab=true; submitForm(viosName,ms,hmc); submitMessage()">Add/Update</button>
+
         </div>
       </div>
       </div>
+      <div>
+          <button type="button" class="btn btn-primary" ng-show="showtab">{{submitMsg}}</button>
+
+      </div>
+
+    </div>

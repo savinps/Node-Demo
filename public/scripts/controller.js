@@ -41,23 +41,40 @@ angular.module('mainApp').filter("myFilter", function(){
 
 
 
-angular.module('mainApp').controller('loginController', function($scope) {
+angular.module('mainApp').controller('loginController', function($scope,$http,$window) {
   $scope.message = "You are in login page";
 
-  $http.post('/login', {
-        username: user.username,
-        password: user.password
-    })
-    .success(function(data, status, headers, config) {
-        done(null, data);
 
-    }).error(function(data, status, header, config) {
-        error = "Invalid User name or password!"
-        done(error, data);
+  // $http.post('/', {
+  //       username: $scope.username,
+  //       password: $scope.password
+  //   })
+  //   .success(function(data, status, headers, config) {
+  //       done(null, data);
+  //
+  //   }).error(function(data, status, header, config) {
+  //       error = "Invalid User name or password!"
+  //       done(error, data);
+  //
+  //   });
+$scope.getLogin = function() {
 
-    });
+  $http({ method: 'POST',
+          url: '/',
+
+          data: {'username':$scope.username, 'password':$scope.password}
+        })
+        .then(function(resp){
+          var resData=resp.data;
+          console.log(resData);
+            //$location.path('/home');
+            $window.location.href = location.hostname'htt+p://omaha01.isst.aus.stglabs.ibm.com:8080/home#/';
+        });
+
+}
+
+
 });
-
 
 
 
@@ -256,10 +273,10 @@ $scope.submit = function() {
 }
 
 $scope.loadData =  function() {
-  $scope.message = $localStorage.message
-
+  $scope.message = $localStorage.message[0].pingData;
+   $scope.message2 = $localStorage.message[0].backData;
 }
-
+$rootScope.downnodes='';
 $scope.confirmation = function() {
   $scope.loadData();
   if($scope.message == "All Nodes are UP\n") {
@@ -308,47 +325,98 @@ $scope.Yes = function() {
 $scope.No = function()
 {
   //alert("We are exiting...");
+  console.log($rootScope.downnodes);
 
-      var r = confirm("Do want to proceed with the installation of VIOS which are active?");
-      if (r == true) {
+  var viosList = $rootScope.viosName;
+  var downList = $rootScope.downnodes;
+  console.log("NODELIST:",viosList);
+  viosList = viosList.trim();
+  downList = downList.trim();
 
-          var viosList = $rootScope.viosName;
-          var downList = $rootScope.downnodes;
-          console.log("NODELIST:",viosList);
-          viosList= viosList.replace(downList,'');
-          console.log("DOWN NODES:"+downList);
-          console.log("UP NODES: "+viosList);
+  var res = downList.split(" ");
 
-        //   if ($scope.scriptLogs2 == "") {
-        //
-        //     $scope.stats2 = "Running Master Script... Please wait.."
-        //
-        //   }
-        //   console.log("Posting Form2 data");
-        //   //console.log(viosQueue + "  "+ email);
-        //   console.log("viosName using rootScope:"+ $rootScope.viosName);
-        //   $http({ method: 'POST',
-        //           url: '/form2',
-        //
-        //           data: {'viosName':viosList, 'mailID':$rootScope.mailID,'build':$rootScope.build,'rootvg':$rootScope.rootvg,'patch':$rootScope.patch }
-        //         })
-        //         .then(function(resp){
-        //           var resData=resp.data;
-        //           console.log(resp);
-        //           console.log("Trying to run Master Script");
-        //           $scope.scriptLogs2 = resData;
-        //           $scope.stats2 = "Logs of Master Script"
-        //           console.log($scope.scriptLogs2);
-        //
-        //
-        // });
+  for (i=0; i < res.length; i++)
+  {
+    viosList= viosList.replace(res[i],'');
+  }
+  viosList = viosList.trim();
+  console.log("DOWN NODES:"+downList);
+  console.log("UP NODES: "+viosList);
+
+  if ($rootScope.downnodes=='' || viosList=='' )
+  {
+    alert("You are exiting from the installation procedure");
+
+    $scope.stats2 =" Installation Process Terminated!!!"
+
+  }else {
+
+    var r = confirm("Do want to proceed with the installation of VIOS which are active?");
+    if (r == true) {
 
 
+        $scope.stats2 = "We are going ahead with the installation of nodes("+viosList+") which are up. Please wait for the further updates."
+      //   if ($scope.scriptLogs2 == "") {
+      //
+      //     $scope.stats2 = "Running Master Script... Please wait.."
+      //
+      //   }
+      //   console.log("Posting Form2 data");
+      //   //console.log(viosQueue + "  "+ email);
+      //   console.log("viosName using rootScope:"+ $rootScope.viosName);
+      //   $http({ method: 'POST',
+      //           url: '/form2',
+      //
+      //           data: {'viosName':viosList, 'mailID':$rootScope.mailID,'build':$rootScope.build,'rootvg':$rootScope.rootvg,'patch':$rootScope.patch }
+      //         })
+      //         .then(function(resp){
+      //           var resData=resp.data;
+      //           console.log(resp);
+      //           console.log("Trying to run Master Script");
+      //           $scope.scriptLogs2 = resData;
+      //           $scope.stats2 = "Logs of Master Script"
+      //           console.log($scope.scriptLogs2);
+      //
+      //
+      // });
+  /////////////////////////////////////////////////////////
+      alert("Here we go...");
+      $scope.scriptLogs2="";
+      if ($scope.scriptLogs2 == "") {
 
+        $scope.stats2 = "Running Master Script... Please wait.."
 
-      } else {
-          console.log("We are exiting..");;
       }
+      console.log("Posting Form2 data");
+      //console.log(viosQueue + "  "+ email);
+      console.log("viosName using rootScope:"+ $rootScope.viosName);
+      $http({ method: 'POST',
+              url: '/form2',
+
+              data: {'viosName':viosList, 'mailID':$rootScope.mailID,'build':$rootScope.build,'rootvg':$rootScope.rootvg,'patch':$rootScope.patch }
+            })
+            .then(function(resp){
+              var resData=resp.data;
+              console.log(resp);
+              console.log("Trying to run Master Script");
+              $scope.scriptLogs2 = resData;
+              $scope.stats2 = "Logs of Master Script"
+              console.log($scope.scriptLogs2);
+
+
+    });
+
+
+
+
+    } else {
+        console.log("We are exiting..");;
+        $scope.stats2 =" Installation Process Terminated..."
+    }
+
+
+  }
+
 
   }
 
@@ -363,6 +431,12 @@ $scope.No = function()
 angular.module('mainApp').controller('viosListController', function ($scope,$http) {
 
     console.log("In ViosList controller");
+    $scope.submitMessage = function()
+    {
+      console.log("Creating submit message");
+      $scope.submitMsg ="Entry is created successfully.Kindly refresh the page."
+      console.log($scope.submitMsg);
+    }
   //  $scope.data = [];
     $scope.submitForm = function(viosName,ms,hmc) {
       var entryString = viosName+" "+ms+" "+hmc;
@@ -461,6 +535,8 @@ angular.module('mainApp').controller('logDataCtrl', function($scope, $http, $fil
     console.log("Inside Log File Function");
     console.log(dirName);
     $scope.LogFiles = dirName;
+    $scope.nodename = viosName;
+    console.log($scope.nodename);
     var dirN = JSON.stringify({dirNme:dirName});
     var s = '"something"';
     var result = JSON.parse(s);
@@ -760,6 +836,92 @@ angular.module('mainApp').controller('clusterCreateController', function($scope,
 
 };
 //
+
+});
+
+
+///// Home Controller
+
+angular.module('mainApp').controller('homeController', function($scope, $http, $location,$localStorage, $rootScope) {
+  var jsonArr = [];
+
+  $http.get("data3.json").then(function (response) {
+      console.log("Got build data");
+      $scope.myData = response.data;
+      console.log("Status data");
+      console.log($scope.myData);
+
+      var percent;
+
+      // for (var i=$scope.myData.length-4; i < $scope.myData.length; i++) {
+      //   // console.log("count:"+i);
+      //   // console.log($scope.myData[i].status);
+      //   jsonArr.push({
+      //         id: i,
+      //         "label": $scope.myData[i].viosName,
+      //         "stat": $scope.myData[i].status,
+      //         "percentage": percent
+      //     });
+      //
+      // }
+      // console.log("Stat array");
+      // console.log(jsonArr);
+
+      for (var i=$scope.myData.length-4; i < $scope.myData.length; i++) {
+          var stat;
+          stat = $scope.myData[i].status;
+          if (stat.indexOf("INVALID") != -1) {
+            percent = 0;
+          }
+
+        else  if ($scope.myData[i].status.indexOf("Backup") != -1) {
+          percent =10;
+        }
+        else  if ($scope.myData[i].status.indexOf("NIM") != -1) {
+          percent =25;
+        }
+        else  if ($scope.myData[i].status.indexOf("Installation") != -1) {
+          percent =50;
+        }
+
+        else  if ($scope.myData[i].status.indexOf("Up after Install") != -1) {
+          percent =60;
+        }
+        else  if ($scope.myData[i].status.indexOf("Down after Install") != -1) {
+          percent =60;
+        }
+        else  if ($scope.myData[i].status.indexOf("PostConfig Done") != -1) {
+          percent =80;
+        }
+        else  if ($scope.myData[i].status.indexOf("Up after PostConfig") != -1) {
+          percent =85;
+        }
+        else  if ($scope.myData[i].status.indexOf("Down after PostConfig") != -1) {
+          percent =85;
+        }
+        else  if ($scope.myData[i].status.indexOf("Restore") != -1) {
+          percent =95;
+        }
+        else  if ($scope.myData[i].status.indexOf("SUCCESS") != -1) {
+          percent =100;
+        }
+
+
+
+
+        jsonArr.push({
+            id: i,
+            "label": $scope.myData[i].viosName,
+            "status": $scope.myData[i].status,
+            "percentage": percent
+        });
+      }
+      $scope.statusdata = [];
+      $scope.statusdata = jsonArr;
+      console.log("Status Array is");
+      console.log($scope.statusdata);
+  });
+
 
 });
 

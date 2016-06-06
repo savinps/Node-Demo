@@ -8,20 +8,30 @@
 
 
 
-        <div> Script is running......Checking For Down Nodes...
+        <div>
+          <div><strong>Ping Test and Backup Result:</strong>
           <!-- <markdown> -->
-          <button type="button" class="btn btn-success" name="button" ng-click ="confirmation()">Ping Test</button>
-          <br>
-           {{msg}}
-      <!-- </markdown> -->
+          <button type="button" class="btn btn-success btn-mini" name="button" ng-click ="showPing=true; confirmation()">Click Here</button>
+        </div>
 
-      <button type="button" class="btn btn-success" name="button" ng-click="Yes()">Yes</button>
-      <button type="button" class="btn btn-success" name="button" ng-click="No()">No</button>
-        <!-- <br>{{stats2}} -->
+      <div class="" ng-show="showPing">
+        <br><strong>Backup and Input Details:</strong>
         <br>
           <pre>
-              {{scriptLogs2}}
+            {{message2}}
           </pre>
+          <br>
+          <strong>{{msg}}</strong>
+    <!-- </markdown> -->
+    <br>
+      <button type="button" class="btn btn-success btn-mini" name="button" ng-click="scriptLog=true; showPing=false; Yes()">Yes</button>
+      <button type="button" class="btn btn-success btn-mini" name="button" ng-click="scriptLog=true; showPing=false; No()">No</button>
+      </div>
+        <br><strong> {{stats2}}</strong>
+        <br>
+          <div ng-show="scriptLog" >
+              {{scriptLogs2}}
+          </div>
 
           </div>
         <script type="text/javascript">
