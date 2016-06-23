@@ -93,19 +93,28 @@
     <div class="row">
       <div class="span12">
 
-        <form class="form-signin" ng-controller="loginController">
+        <form ng-app="myForm" class="form-signin" ng-controller="loginController">
   {{message}}
+
+<span style="color:red" ng-show="myForm.username.$dirty && myForm.username.$invalid">
+<span ng-show="myForm.username.$error.required">Username is required.</span>
+</span>
+<span style="color:red" ng-show="myForm.password.$dirty && myForm.password.$invalid">
+<span ng-show="myForm.password.$error.required">Username is required.</span>
+</span>
   <h2 class="form-signin-heading">Sign In</h2>
   <label for="inputUsername" class="sr-only">Username</label>
-  <input type="text" id="Username" class="form-control" placeholder="Username" required autofocus name="username"ng-model="username">
+  <input type="text" id="Username" class="form-control" placeholder="Username"  required autofocus name="username" ng-model="username">
   <label for="inputPassword" class="sr-only">Password</label>
   <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name="password" ng-model="password">
+  
   <div class="checkbox">
     <label>
       <input type="checkbox" value="remember-me"> Remember me
     </label>
   </div>
-  <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="getLogin()">Sign in</button>
+  <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="getLogin()" ng-disabled="myForm.username.$dirty && myForm.username.$invalid ||
+myForm.password.$dirty && myForm.password.$invalid">Sign in</button>
 </form>
 
 
