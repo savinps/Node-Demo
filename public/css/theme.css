@@ -411,7 +411,7 @@ transition: all .2s ease-in-out;
 	border-bottom-right-radius: 3px
 }
 .btn-group.shaded-icon>.btn>i {
-	color: rgba(0,0,0,0.3);
+	color: rgba(1,0,0,0.3);
 	text-shadow: 0 0 1px #eee, 0 0 0 #000, 0 0 1px #fff
 }
 .btn-group.shaded-icon>.btn:hover>i {
@@ -931,8 +931,8 @@ transition: all .2s ease-in-out;
 	border-top: 1px solid #555
 }
 .widget-menu>li>a {
-	background-color: #2d2b32;
-	color: #767676;
+	background-color: #AB0C0C;
+	color: #fff;
 	-webkit-transition: all .2s ease-in-out;
 -moz-transition: all .2s ease-in-out;
 transition: all .2s ease-in-out;

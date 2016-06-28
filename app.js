@@ -4,7 +4,7 @@ var express = require('express'),
   path = require('path');
 
   var routes = require('./routes');
-
+  var session = require('express-session');
   var fsmonitor = require('fsmonitor');
 
 
@@ -13,6 +13,18 @@ var express = require('express'),
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(bodyParser());
   app.use(bodyParser.urlencoded({extended: false}));
+
+  app.use(session({
+    cookie: {
+      path    : '/',
+      httpOnly: false,
+      maxAge  : 24*60*60*1000
+    },
+    secret: '1234567890QWERT',
+    resave: true,
+    saveUninitialized: true
+  }));
+
 
 
 
@@ -24,10 +36,12 @@ var express = require('express'),
   app.post('/form2', routes);
   app.get('/history',routes);
  app.post('/historyp',routes);
+ app.post('/pieStat', routes);
  app.post('/clusterForm', routes);
  app.post('/clusterForm2', routes);
  app.post('/clusterdata', routes);
  app.post('/clusterCreate', routes);
+ app.post('/logout', routes);
 
 
   var server = app.listen(8080, function() {

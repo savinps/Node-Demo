@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/sol.css">   <!-- multiselect css -->
     <link rel="stylesheet" href="https://rawgit.com/esvit/ng-table/master/dist/ng-table.min.css">
     <!-- <link type="text/css" rel="stylesheet" href="https://raw.githubusercontent.com/esvit/ng-table/master/dist/ng-table.min.css"> -->
-
+        <link rel="stylesheet" href="https://dojotoolkit.org/reference-guide/1.8/_static/js/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="/css/angular-responsive-tables.min.css" >
     <link rel="stylesheet" href="/css/angular-responsive-tables.css" >
 
@@ -126,18 +126,7 @@
                     CLUSTER INSTALL
                   </a>
                 </li>
-                <li>
-                  <a href="other-user-listing.html">
-                    <i class="icon-inbox"></i>
-                    VIOS BACKUP
-                  </a>
-                </li>
-                <li>
-                  <a href="other-user-listing.html">
-                    <i class="icon-inbox"></i>
-                    CLUSTER BACKUP
-                  </a>
-                </li>
+
               </ul>
             </li>
 
@@ -178,27 +167,7 @@
               </ul>
             </li>
 
-            <li>
-              <a class="collapsed" data-toggle="collapse" href="#togglePages3">
-                <i class="menu-icon icon-cog"></i>
-                <i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right"></i>
-                Backup Option
-              </a>
-              <ul id="togglePages3" class="collapse unstyled">
-                <li ng-controller="viosFormCtrl">
-                  <a href="" ng-click="submit()">
-                    <i class="icon-inbox"></i>
-                    VIOS BACKUP
-                  </a>
-                </li>
-                <li ng-controller="clusterFormCtrl">
-                  <a href="" ng-click="submit()">
-                    <i class="icon-inbox"></i>
-                    CLUSTER BACKUP
-                  </a>
-                </li>
-              </ul>
-            </li>
+
 
             <li>
               <a href="task.html">
@@ -208,8 +177,8 @@
               </a>
             </li>
 
-            <li>
-              <a href="#">
+            <li ng-controller="loginController">
+              <a href="" ng-click="submit()">
                 <i class="menu-icon icon-signout"></i>
                 Logout
               </a>
@@ -218,6 +187,23 @@
 
           </ul>
 
+          <!-- <div class="container">
+  <h2>Dropdown Example</h2>
+
+  <div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle btn btn-large" id="menu1" type="button" data-toggle="dropdown">Dropdown Example
+      <i class="menu-icon icon-cog"></i>
+      <i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right"></i>
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+      <li role="presentation" ng-controller="viosFormCtrl"><a role="menuitem" tabindex="-1" href="" ng-click="submit()">HTML</a></li>
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
+      <li role="presentation" class="divider"></li>
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
+    </ul>
+  </div>
+</div> -->
 
 
 
@@ -240,7 +226,7 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-route.min.js"></script> -->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
@@ -261,6 +247,19 @@
     <script src="https://rawgit.com/esvit/ng-table/master/dist/ng-table.min.js"></script>
     <script type="text/javascript" src="/scripts/angular-responsive-tables.min.js"></script>
     <script type="text/javascript" src="/scripts/angular-responsive-tables.js"></script>
+    <!-- <script  src="http://code.angularjs.org/1.2.2/angular.js" data-semver="1.2.2"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js">  </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+    <script  src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.11/d3.js"></script>
+    <script  src="https://rawgit.com/chinmaymk/angular-charts/bower/dist/angular-charts.min.js"></script> -->
+    <script src='https://dojotoolkit.org/reference-guide/1.8/_static/js/dojo/dojo.js'></script>
+<script>dojoConfig = {parseOnLoad: true}</script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script> -->
+
+
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"> -->
+
+    <!-- </script>
     <script type="text/javascript">
     function toggleChevron(e) {
       $(e.target)
@@ -270,11 +269,11 @@
       }
       $('#accordion').on('hidden.bs.collapse', toggleChevron);
       $('#accordion').on('shown.bs.collapse', toggleChevron);
-    </script>
+    </script> -->
 
 
 
-    <script>
+    <!-- <script>
 
   		$(document).ready(function() {
   			$('.datatable-1').dataTable();
@@ -290,7 +289,7 @@ $('#togglePages2').attr('aria-expanded','false');
 });
 
   		} );
-  	</script>
+  	</script> -->
 
   </body>
 </html>

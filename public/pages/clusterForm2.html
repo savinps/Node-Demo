@@ -1,27 +1,43 @@
+
+
 <div class="content" >
 
   <div class="module">
     <div class="module-head">
-      <h3>CLUSTER INSTALLATION PROGRESS</h3>
+      <h3>VIOS INSTALLATION Progress</h3>
     </div>
     <div class="module-body" ng-controller = "clusterFormController">
 
 
 
-        <div> Script is running......Checking For Down Nodes...
+        <div>
+          <div><strong>Ping Test and Backup Result:</strong>
           <!-- <markdown> -->
-          <button type="button" name="button" ng-click ="confirmation()">Ping Test</button>
-          <br>
-           {{msg}}
-      <!-- </markdown> -->
+          <button type="button" class="btn btn-success btn-mini" name="button" ng-click ="showPing=true; confirmation()">Click Here</button>
+        </div>
 
-      <button type="button" name="button" ng-click="Yes()">Yes</button>
-      <button type="button" name="button" ng-click="No()">No</button>
-        <!-- <br>{{stats2}} -->
-        <br> {{scriptLogs2}}
+      <div class="" ng-show="showPing">
+        <br><strong>Backup and Input Details:</strong>
+        <br>
+          <pre>
+            {{message2}}
+          </pre>
+          <br>
+          <strong>{{msg}}</strong>
+    <!-- </markdown> -->
+    <br>
+      <button type="button" class="btn btn-success btn-mini" name="button" ng-click="scriptLog=true; showPing=false; Yes()">Yes</button>
+      <button type="button" class="btn btn-success btn-mini" name="button" ng-click="scriptLog=true; showPing=false; No()">No</button>
+      </div>
+        <br><strong> {{stats2}}</strong>
+        <br>
+          <div ng-show="scriptLog" >
+              {{scriptLogs2}}
+          </div>
+
           </div>
         <script type="text/javascript">
-          console.log("We are in clusterform2 page");
+          console.log("We are in form2 page");
         //  console.log($scope.scriptLogs);
         //console.log($scope.scriptLogs);
         </script>

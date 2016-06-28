@@ -43,7 +43,22 @@ angular.module('mainApp').filter("myFilter", function(){
 
 angular.module('mainApp').controller('loginController', function($scope,$http,$window) {
   $scope.message = "You are in login page";
+  $scope.msg2 = "";
+///////
 
+
+///////
+
+  $scope.submit = function() {
+//    $location.path('/logout');
+    //$window.location.href = "http://"+location.hostname;
+    console.log(location.hostname);
+    $window.location.href = 'http://omaha01.isst.aus.stglabs.ibm.com:8080';
+    $scope.message = "";
+    $scope.msg2 = "Logged Out";
+
+
+  }
 
   // $http.post('/', {
   //       username: $scope.username,
@@ -57,7 +72,9 @@ angular.module('mainApp').controller('loginController', function($scope,$http,$w
   //       done(error, data);
   //
   //   });
+  //$scope.log ="";
 $scope.getLogin = function() {
+
 
   $http({ method: 'POST',
           url: '/',
@@ -68,10 +85,34 @@ $scope.getLogin = function() {
           var resData=resp.data;
           console.log(resData);
             //$location.path('/home');
-            $window.location.href = location.hostname'htt+p://omaha01.isst.aus.stglabs.ibm.com:8080/home#/';
+          //  $window.location.href = location.hostname+'http://omaha01.isst.aus.stglabs.ibm.com:8080/home#/';
+
+          if ( resData.indexOf("Logged in successfully") != -1)  {
+              $window.location.href = "http://"+location.hostname+':8080/home#/';
+              console.log("Going to home page");
+          }
+            else {
+               $scope.log ="Invalid Credentail";
+               console.log("Stay in login page");
+            }
         });
 
 }
+
+$scope.getLogout = function() {
+
+  $http({ method: 'GET',
+          url: '/',
+
+          data: {'username':'SAVIN'}
+        })
+        .then(function(resp){
+          var resData=resp.data;
+          console.log(resData);
+            //$location.path('/home');
+            $window.location.href = "http://"+location.hostname;
+        });
+      }
 
 
 });
@@ -93,6 +134,13 @@ angular.module('mainApp').controller('clusterFormCtrl', function($scope, $locati
   }
 });
 
+angular.module('mainApp').controller('pieStatsCtrl', function($scope, $location) {
+  console.log("In pieStatsCtrl");
+  $scope.submit = function() {
+    $location.path('/pieStat');
+  }
+});
+
 angular.module('mainApp').controller('clusterCreateCtrl', function($scope, $location) {
   console.log("In clusterFormCtrl");
   $scope.submit = function() {
@@ -100,10 +148,23 @@ angular.module('mainApp').controller('clusterCreateCtrl', function($scope, $loca
   }
 });
 
+angular.module('mainApp').controller('logoutController', function($scope, $location) {
+  console.log("In Logout");
+
+
+});
+
 angular.module('mainApp').controller('viosForm2Ctrl', function($scope, $location) {
   console.log("In viosForm2Ctrl");
   $scope.submit = function() {
     $location.path('/form2');
+  }
+});
+
+angular.module('mainApp').controller('clusterForm2Ctrl', function($scope, $location) {
+  console.log("In clusterForm2Ctrl");
+  $scope.submit = function() {
+    $location.path('/clusterForm2');
   }
 });
 
@@ -467,7 +528,7 @@ angular.module('mainApp').controller('viosListController', function ($scope,$htt
 });
 
 
-angular.module('mainApp').controller('logDataCtrl', function($scope, $http, $filter, ngTableParams) {
+angular.module('mainApp').controller('logDataCtrl', function($scope, $http, $filter, $timeout,NgTableParams) {
   console.log("In logDataCtrl");
 
 
@@ -479,16 +540,24 @@ angular.module('mainApp').controller('logDataCtrl', function($scope, $http, $fil
       $scope.myData = response.data;
   });
 
-  var tableArr = [];
+  // var tableArr = [{"id":"4","viosName":"tulpvm1v2","build":"1609A_61k","patch":"Nil","emailID":"savinps@in.ibm.com","date":"30/05/2016(9:13)","status":"Backup Issue(FAILED)","LogFiles":"SSP_VIOS_May302016050913"},
+  // {"id":"4","viosName":"taripvmv2","build":"1621A_61k","patch":"Nil","emailID":"savinps@in.ibm.com","date":"02/06/2016(46:51)","status":"SUCCESS","LogFiles":"SSP_VIOS_Jun22016064651"},
+  // {"id":"4","viosName":"beev1","build":"1621A_61k","patch":"Nil","emailID":"savinps@in.ibm.com","date":"03/06/2016(9:51)","status":"NIM Done(Running)","LogFiles":"SSP_VIOS_Jun32016040951"},
+  // {"id":"4","viosName":"brazosv2","build":"1621A_61k","patch":"Nil","emailID":"savinps@in.ibm.com","date":"17/06/2016(44:41)","status":"SUCCESS","LogFiles":"SSP_VIOS_Jun172016044441"},
+  // {"id":"4","viosName":"brazosv1","build":"1621A_61k","patch":"Nil","emailID":"savinps@in.ibm.com","date":"21/06/2016(21:48)","status":"Installation Issue(FAILED)","LogFiles":"SSP_VIOS_Jun212016012149"}];
+    var tableArr = [];
+
+
   $http.get("data3.json").then(function (response) {
       console.log("http success");
       $scope.myData2 = response.data;
-
+      console.log(response.data);
       for (var i = 0; i < $scope.myData2.length; i++) {
           tableArr.push({
               "id": i,
               "viosName": $scope.myData2[i].viosName,
               "build": $scope.myData2[i].build,
+              "patch": $scope.myData2[i].patch,
               "emailID": $scope.myData2[i].emailID,
               "date": $scope.myData2[i].date,
               "status": $scope.myData2[i].status,
@@ -504,19 +573,23 @@ angular.module('mainApp').controller('logDataCtrl', function($scope, $http, $fil
       console.log("Table Array");
       console.log(tableArr);
 
-      $scope.usersTable = new ngTableParams({
+      $scope.usersTable = new NgTableParams({
                     page: 1,
                     count: 10
                 }, {
                     total: tableArr.length,
-                    getData: function ($defer, params) {
+                    getData: function (params) {
                       $scope.data = params.sorting() ? $filter('orderBy')(tableArr, params.orderBy()) : tableArr;
                       $scope.data = params.filter() ? $filter('filter')($scope.data, params.filter()) : $scope.data;
                         $scope.data = $scope.data.slice((params.page() - 1) * params.count(), params.page() * params.count());
-                        $defer.resolve($scope.data);
+                        return $scope.data;
                     }
+
                 });
 
+
+            //     $scope.data= tableArr;
+            // console.log($scope.data);
 
   });
 
@@ -843,8 +916,48 @@ angular.module('mainApp').controller('clusterCreateController', function($scope,
 ///// Home Controller
 
 angular.module('mainApp').controller('homeController', function($scope, $http, $location,$localStorage, $rootScope) {
-  var jsonArr = [];
 
+///////////
+// $scope.config = {
+//     title: 'Products',
+//     tooltips: true,
+//     labels: false,
+//     "innerRadius": 50,
+//     mouseover: function() {},
+//     mouseout: function() {},
+//     click: function() {},
+//     legend: {
+//       display: true,
+//       //could be 'left, right'
+//       position: 'right'
+//     }
+//   };
+//
+//   $scope.data = {
+//     series: ['Sales', 'Income', 'Expense', 'Laptops', 'Keyboards'],
+//     data: [{
+//       x: "Laptops",
+//       y: [100],
+//
+//     }, {
+//       x: "Desktops",
+//       y: [300]
+//     }, {
+//       x: "Mobiles",
+//       y: [351]
+//     }, {
+//       x: "Tablets",
+//       y: [54]
+//     }]
+//   };
+//////////
+
+
+  var jsonArr = [];
+  var inValidArr = [];
+  var runArr = [];
+  var successArr = [];
+  var failArr = [];
   $http.get("data3.json").then(function (response) {
       console.log("Got build data");
       $scope.myData = response.data;
@@ -906,20 +1019,98 @@ angular.module('mainApp').controller('homeController', function($scope, $http, $
           percent =100;
         }
 
-
+        //// Setting Progress Bar
+        if ($scope.myData[i].status.indexOf("FAILED") != -1) {
+          progColor="bar bar-danger";
+        }
+        else  if ($scope.myData[i].status.indexOf("Running") != -1) {
+          progColor = "bar";
+        }
+        else  if ($scope.myData[i].status.indexOf("SUCCESS") != -1) {
+          progColor = "bar bar-success";
+        }
+        else if ($scope.myData[i].status.indexOf("INVALID") != -1) {
+          progColor="bar bar-danger";
+        }
+        else if ($scope.myData[i].status.indexOf("Started") != -1) {
+          progColor="bar bar-warning";
+        }
 
 
         jsonArr.push({
             id: i,
             "label": $scope.myData[i].viosName,
             "status": $scope.myData[i].status,
-            "percentage": percent
+            "percentage": percent,
+            "progress": progColor
         });
       }
+
       $scope.statusdata = [];
       $scope.statusdata = jsonArr;
       console.log("Status Array is");
       console.log($scope.statusdata);
+      console.log("Status table length"+$scope.myData.length);
+      for (var i=0; i < $scope.myData.length; i++) {
+
+
+          if ($scope.myData[i].status.indexOf("INVALID") != -1) {
+            inValidArr.push({
+                id: i,
+                "label": $scope.myData[i].viosName,
+                "status": $scope.myData[i].status,
+                "build": $scope.myData[i].build
+            });
+          }
+          else  if ($scope.myData[i].status.indexOf("FAILED") != -1) {
+            failArr.push({
+                id: i,
+                "label": $scope.myData[i].viosName,
+                "status": $scope.myData[i].status,
+                "build": $scope.myData[i].build
+            });
+          }
+          else  if ($scope.myData[i].status.indexOf("Running") != -1) {
+            runArr.push({
+                id: i,
+                "label": $scope.myData[i].viosName,
+                "status": $scope.myData[i].status,
+                "build": $scope.myData[i].build
+            });
+          }
+          else  if ($scope.myData[i].status.indexOf("SUCCESS") != -1) {
+            successArr.push({
+                id: i,
+                "label": $scope.myData[i].viosName,
+                "status": $scope.myData[i].status,
+                "build": $scope.myData[i].build
+            });
+          }
+        }
+
+        $scope.failData = [];
+        $scope.failData = failArr;
+        $scope.runData = [];
+        $scope.runData = runArr;
+        $scope.successData = [];
+        $scope.successData = successArr;
+        $scope.invalData = [];
+        $scope.invalData = inValidArr;
+        $scope.statusdata = jsonArr;
+        console.log("Status Array is");
+        console.log($scope.failData.length);
+        console.log($scope.runData.length);
+        console.log($scope.successData.length);
+        console.log($scope.invalData.length);
+
+         $scope.data = [ {"id":1,"text":"SUCCESS","y":$scope.successData.length},
+                      {"id":2,"text":"FAILED","y":$scope.failData.length},
+                    {"id":3,"text":"Running","y":$scope.runData.length},
+                    {"id":4,"text":"INVALID","y":$scope.invalData.length}];
+
+                    $localStorage.stats = $scope.data;
+                    $rootScope.statTable = $scope.data;
+                    console.log("local storage length:"+$localStorage.stats.length);
   });
 
 
@@ -939,6 +1130,9 @@ mainApp.config(['$routeProvider', function($routeProvider) {
     .when('/history', {
       templateUrl: 'pages/history.html'
     })
+    .when('/pieStat', {
+      templateUrl: 'pages/pieStat.html'
+    })
     .when('/clusterForm', {
       templateUrl: 'pages/clusterForm.html'
     })
@@ -956,6 +1150,9 @@ mainApp.config(['$routeProvider', function($routeProvider) {
     })
     .when('/form2', {
       templateUrl: 'pages/form2.html'
+    })
+    .when('/logout', {
+      templateUrl: 'pages/logout.html'
     })
     .when('/home', {
       templateUrl: 'pages/home.html'

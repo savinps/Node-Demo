@@ -1,5 +1,6 @@
 var express=require('express');
 var fs = require('fs');
+var session = require('express-session');
 var fsmonitor = require('fsmonitor');
 var nodemailer = require('nodemailer');
 //var chokidar = require('chokidar');
@@ -25,6 +26,16 @@ var fileChanges= fsmonitor.watch('./SSP_Logs', null, function(change) {
 //     var j = schedule.scheduleJob('/1 * * * *', function(){
 //   console.log('The answer to life, the universe, and everything!');
 // });
+
+function checkAuth(req, res, next) {
+  if (!req.session.user_id) {
+    res.send('You are not authorized to view this page');
+  } else {
+    next();
+  }
+}
+
+
 
 var CronJob = require('cron').CronJob;
 new CronJob('10 * * * * *', function() {
@@ -158,9 +169,73 @@ function statusCheck() {
             else if (log_files[flag1].logContent.indexOf("VIOS "+config[j].viosName+" BACKUP FAILED") != -1) {
                 config[j].status="Backup Issue(FAILED)";
             }
-            // else{
-            //     config[j].status="INVALID";
-            // }
+
+            else if (log_files[flag1].logContent.indexOf(config[j].viosName+" is down!!!") != -1) {
+                config[j].status=" No Backup (Running)";
+
+                if (flag2 != -1) {
+
+                  if (log_files[flag2].logContent.indexOf("NIM RESOURCE ALLOCATION FOR THE SET: "+config[j].viosName+" COMPLETED") != -1){
+                      config[j].status="NIM Done(Running)";
+                      console.log("Nim Done(Running)");
+
+                      if (log_files[flag2].logContent.indexOf("INSTALLATION INITIATION FOR THE SET: "+config[j].viosName+" COMPLETED") != -1) {
+                        config[j].status="Installation Done(Running)";
+
+                        if (log_files[flag2].logContent.indexOf("WAITING FOR SET: "+config[j].viosName+" SUCCESSFUL") != -1) {
+                          config[j].status="Up after Installation(Running)";
+
+                              if (log_files[flag2].logContent.indexOf("POST INSTALL SETUP FOR SET: "+config[j].viosName+" SUCCESSFUL.") != -1) {
+                                config[j].status="PostConfig Done(Running)";
+
+                                  if (log_files[flag2].logContent.indexOf("WAITING FOR SET: "+config[j].viosName+" FAILED") != -1){
+                                    config[j].status="Down after PostConfig(FAILED)";
+                                  }
+                                  else if (log_files[flag2].logContent.indexOf("WAITING FOR SET POST CONFIG: "+config[j].viosName+" SUCCESSFUL") != -1) {
+                                    config[j].status="Up after PostConfig(Running)";
+
+                                        if(log_files[flag2].logContent.indexOf("VIOS backup restore on "+config[j].viosName+" SUCCESSFUL") != -1) {
+                                          config[j].status="Restore Done(Running)";
+
+                                          if(log_files[flag2].logContent.indexOf("VIOS RESTORE FOR "+config[j].viosName+" COMPLETED") != -1) {
+                                            config[j].status="SUCCESS";
+                                          }
+
+                                        }
+                                        else if (log_files[flag2].logContent.indexOf("restore on "+config[j].viosName+" Failed") != -1) {
+                                          config[j].status="Restore Issue(FAILED)";
+                                        }
+                                  }
+                              }
+                              else if (log_files[flag2].logContent.indexOf("POST INSTALL SETUP FAILED FOR "+config[j].viosName) != -1) {
+                                config[j].status="PostConfig Issue(FAILED)";
+                              }
+
+                        }
+                        else if (log_files[flag2].logContent.indexOf("WAITING FOR SET: "+config[j].viosName+" FAILED") != -1) {
+                          config[j].status="Down after Install(FAILED)";
+                        }
+                      }
+                      else if (log_files[flag2].logContent.indexOf("Installation on SET "+config[j].viosName+" timed out") != -1){
+                        config[j].status="Installation Issue(FAILED)";
+                      }
+                      else if (log_files[flag2].logContent.indexOf("INSTALLATION INITIATION FOR THE SET: "+config[j].viosName+" FAILED") != -1) {
+                        config[j].status="Installation Issue(FAILED)";
+                      }
+
+                  }
+                  else if (log_files[flag2].logContent.indexOf("Nim Master doesnt not contain "+config[j].build) != -1){
+                      config[j].status="NIM Issue(FAILED)";
+                  }
+                  else if (log_files[flag2].logContent.indexOf("Nim Resource allocation Failed for "+config[j].viosName) != -1) {
+                      config[j].status="NIM Issue(FAILED)";
+                  }
+                  else if (log_files[flag2].logContent.indexOf("Nim Allocation for "+config[j].viosName+" timed out ...") != -1) {
+                      config[j].status="NIM Issue(FAILED)";
+                  }
+                }
+
+            }
 
 
           }
@@ -300,7 +375,7 @@ router.get('/',function(req,res,next){
     classname:'login'
   });
 });
-router.get('/home',function(req,res,next){
+router.get('/home',checkAuth,function(req,res,next){
   console.log("success");
   res.render('index',{
     title:'SSP_Tool - Home',
@@ -315,21 +390,29 @@ router.post('/',function(req,res,next){
     var password = req.body.password;
     var auth;
     if (username =="admin" && password == "abc123") {
-      //res.redirect('/home');
+      // res.redirect('/home');
+      req.session.user_id = 'adminID';
       console.log("Got Access");
       auth="Logged in successfully"
     }
     else {
       console.log("Invalid Credentails");
       auth="Invalid Credentails";
-      //res.redirect('/');
+      // res.redirect('/');
     }
 
     res.send(auth);
 
 
+
 });
 
+router.get('/logout', function (req, res) {
+  delete req.session.user_id;
+  console.log("session is deleted");
+  //res.redirect('/login');
+    res.send("Logged Out successfully");
+});
 
 // router.post('/login',function(req,res,next) {
 //   var username= req.body.username;
@@ -455,6 +538,17 @@ router.post('/form2',function(req,res,next){
         });
 
     /// Creating input file
+    if (typeof patch === 'undefined'){
+      patch ="";
+    }
+
+    if (typeof rootvg === 'undefined'){
+      rootvg ="";
+    }
+    if (typeof mailid === 'undefined'){
+      mailid ="savinps@in.ibm.com";
+    }
+
       var input_file = "NODES : " + viosname +"\n"
                         + "BUILD : " + build + "\n"
                         +"SSP PATCH : " + patch + "\n"
@@ -778,6 +872,16 @@ router.post('/viosListp',function(req,res,next){
      });
 
  /// Creating input file
+ if (typeof patch === 'undefined'){
+   patch ="";
+ }
+
+ if (typeof rootvg === 'undefined'){
+   rootvg ="";
+ }
+ if (typeof mailid === 'undefined'){
+   mailid ="savinps@in.ibm.com";
+ }
  var input_file = "NODES : " + viosname +"\n"
                   + "BUILD : " + build + "\n"
                   +"SSP PATCH : " + patch + "\n"
@@ -1054,6 +1158,23 @@ res.send("Working fine till now");
    console.log(patch);
    var build = req.body.build;
    console.log(build);
+
+
+
+     if (typeof patch === 'undefined'){
+       patch ="";
+     }
+
+     if (typeof rootvg === 'undefined'){
+       rootvg ="";
+     }
+     if (typeof mailid === 'undefined'){
+       mailid ="savinps@in.ibm.com";
+     }
+
+
+
+
    var commandString = " -n "+'\"'+viosname+'\"'+" -b "+build+" -r "+'\"'+rootvg+'\"'+" -e "+mailid;
    console.log(commandString);
    console.log("Command Log");
@@ -1108,6 +1229,9 @@ res.send("Working fine till now");
      });
 
  /// Creating input file
+
+
+
    var input_file = "NODES : " + viosname +"\n"
                      + "BUILD : " + build + "\n"
                      +"SSP PATCH : " + patch + "\n"
