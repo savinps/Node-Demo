@@ -1,4 +1,0 @@
-#! /usr/bin/ksh
-
-path=`pwd`
-echo $path
